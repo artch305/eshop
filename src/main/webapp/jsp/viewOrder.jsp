@@ -97,26 +97,6 @@
 
     </ctg:printProductsInCartOrOrder>
 </div>
-<script lang="javascript">
-
-/*    function change(formId) {
-
-        var formElement = $('#' + formId);
-        var addUrl = formElement.prop('action');
-
-        $.post(addUrl, formElement.serializeArray())
-            .done(function (resp) {
-                window.location.reload();
-            })
-            .fail(function (err) {
-                console.log(err);
-                alert('Failed to change cart');
-            });
-
-        return false;
-    }*/
-
-</script>
 </fmt:bundle>
 </body>
 </html>
