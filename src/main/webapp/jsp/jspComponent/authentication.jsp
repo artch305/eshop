@@ -67,24 +67,6 @@
         }, false);
     })();
 
-/*    (function () {
-        $('#auth-form').on('submit', function (e) {
-            e.preventDefault();
-
-            var authUrl = $('#auth-form').prop('action');
-
-            $.post(authUrl, $('#auth-form').serializeArray())
-                .done(function (resp) {
-                    window.location.reload();
-                })
-                .fail(function (err) {
-                    console.log(err);
-                    alert('Failed to authorize user');
-                });
-        })
-    })();*/
-
-
 </script>
 </body>
 </html>
