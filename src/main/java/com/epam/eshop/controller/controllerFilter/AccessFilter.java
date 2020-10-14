@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Created by artch on 23.09.2020.
  */
-@WebFilter (urlPatterns = {"/cart", "/orders", "/orders/*", "/users"})
+@WebFilter(urlPatterns = {"/cart", "/orders", "/orders/*", "/users"})
 public class AccessFilter implements Filter {
 
     public void destroy() {
@@ -24,7 +24,7 @@ public class AccessFilter implements Filter {
 
         User user = (User) request.getSession(true).getAttribute("currentUser");
 
-        if(user == null){
+        if (user == null) {
             response.sendRedirect(request.getContextPath() + "/main");
         } else {
             chain.doFilter(req, resp);
