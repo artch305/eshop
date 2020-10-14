@@ -1,5 +1,6 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
 import com.epam.eshop.service.cartHandler.CartActionFactory;
 import com.epam.eshop.service.cartHandler.CartActionHandler;
@@ -34,7 +35,10 @@ public class CartServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (!UserRole.CUSTOMER.equals(request.getSession().getAttribute("currentUser"))) {
+        User currentUser = (User) request.getSession().getAttribute("currentUser");
+        String currentUserRole = currentUser.getUserRole().getRole();
+
+        if (!UserRole.CUSTOMER.equals(currentUserRole)) {
             response.sendRedirect(request.getContextPath() + "/main");
             return;
         }
