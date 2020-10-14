@@ -2,8 +2,8 @@ package com.epam.eshop.controller;
 
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
-import com.epam.eshop.service.cartHandler.CartActionFactory;
-import com.epam.eshop.service.cartHandler.CartActionHandler;
+import com.epam.eshop.service.cart.CartActionFactory;
+import com.epam.eshop.service.cart.CartActionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -1,4 +1,4 @@
-package com.epam.eshop.controller.exception;
+package com.epam.eshop.exception;
 
 /**
  * Created by artch on 22.09.2020.

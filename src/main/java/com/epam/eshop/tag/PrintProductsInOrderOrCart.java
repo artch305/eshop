@@ -1,4 +1,4 @@
-package com.epam.eshop.customTag;
+package com.epam.eshop.tag;
 
 import com.epam.eshop.entity.Order;
 import com.epam.eshop.entity.Product;
@@ -115,7 +115,6 @@ public class PrintProductsInOrderOrCart extends TagSupport {
 
         out.write("<div class=\"col-2\">");
         out.write("<form id=\"" + formChangeId + "\"" +
-                //"onsubmit=\"return change('" + formChangeId + "')\"" +
                 "action=\"" + contextPath + urlForButton + "\" method=\"post\">");
         out.write("<div class=\"row\">");
         out.write("<div class=\"form-group\">");
@@ -138,7 +137,6 @@ public class PrintProductsInOrderOrCart extends TagSupport {
         printViewButton(out, productEntry);
         out.write("<div class=\"row\">");
         out.write("<form id=\"" + formRemoveId + "\"" +
-                //"onsubmit=\"return change('" + formRemoveId + "')\"" +
                 "action=\"" + contextPath + urlForButton + "\" method=\"post\">");
 
         out.write("<input type=\"hidden\" name=\"productId\" value=\"" + productEntry.getKey().getId() + "\">");

@@ -1,4 +1,4 @@
-package com.epam.eshop.controller.controllerFilter;
+package com.epam.eshop.controller.filter;
 
 import com.epam.eshop.entity.User;
 

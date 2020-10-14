@@ -1,6 +1,6 @@
 package com.epam.eshop.service;
 
-import com.epam.eshop.controller.exception.DBException;
+import com.epam.eshop.exception.DBException;
 import com.epam.eshop.dao.ConnectionManager;
 import com.epam.eshop.dao.UserDAO;
 import com.epam.eshop.entity.User;

@@ -7,7 +7,7 @@
     <uri>customTags</uri>
     <tag>
         <name>printProducts</name>
-        <tag-class>com.epam.eshop.customTag.PrintProductsTag</tag-class>
+        <tag-class>com.epam.eshop.tag.PrintProductsTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>products</name>
@@ -19,7 +19,7 @@
 
     <tag>
         <name>printProductsInCartOrOrder</name>
-        <tag-class>com.epam.eshop.customTag.PrintProductsInOrderOrCart</tag-class>
+        <tag-class>com.epam.eshop.tag.PrintProductsInOrderOrCart</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>productsWithAmount</name>

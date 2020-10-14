@@ -1,4 +1,4 @@
-package com.epam.eshop.controller.controllerFilter;
+package com.epam.eshop.controller.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

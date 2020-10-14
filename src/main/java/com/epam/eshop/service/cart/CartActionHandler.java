@@ -1,4 +1,4 @@
-package com.epam.eshop.service.cartHandler;
+package com.epam.eshop.service.cart;
 
 import javax.servlet.http.HttpServletRequest;
 

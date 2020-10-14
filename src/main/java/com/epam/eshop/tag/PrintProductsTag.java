@@ -1,4 +1,4 @@
-package com.epam.eshop.customTag;
+package com.epam.eshop.tag;
 
 import com.epam.eshop.entity.*;
 import org.slf4j.Logger;
