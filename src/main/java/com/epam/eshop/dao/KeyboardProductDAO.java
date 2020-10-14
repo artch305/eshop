@@ -26,9 +26,8 @@ public class KeyboardProductDAO extends BaseProductDAO {
     private static final String SQL_GET_KEYBOARD_BY_ID = "SELECT * FROM products " +
             "join keyboard_products on products.id = keyboard_products.product_id " +
             "where products.id = ?";
-    private static final String SQL_UPDATE_MONITOR_DATA = "update products join keyboard_products on products.id = keyboard_products.product_id " +
-            "set category = ?, producer = ?, name = ?, price = ?, description = ?, active = ?, img_url  = ?, " +
-            "connection_type = ?, mechanical = ?, light_color = ? where products.id = ?";
+    private static final String SQL_UPDATE_MONITOR_DATA = "update keyboard_products set " +
+            "connection_type = ?, mechanical = ?, light_color = ? where product_id = ?";
     private static final String SQL_ADD_NEW_KEYBOARD = "insert into keyboard_products (product_id, connection_type, mechanical, light_color) " +
             "values (?,?,?,?)";
 
@@ -49,7 +48,7 @@ public class KeyboardProductDAO extends BaseProductDAO {
 
     @Override
     public List<Product> getProducts(Connection connection, AbstractFilters filters, int startItem) throws SQLException {
-        String query = SQL_GET_ALL_KEYBOARDS + filters.getConditions() + " limit ?," + getProductsOnOnePage();
+        String query = SQL_GET_ALL_KEYBOARDS + filters.getConditions() + filters.getConditionForOrdering() + " limit ?," + getProductsOnOnePage();
         List<Product> keyboardProducts = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,19 +83,19 @@ public class KeyboardProductDAO extends BaseProductDAO {
 
     @Override
     public void updateProduct(Connection connection, Map<String, String> values) throws SQLException {
+        super.updateProduct(connection,values);
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_MONITOR_DATA)) {
-            super.fillBaseValueToPreparedStatement(values, preparedStatement);
-            preparedStatement.setString(8, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
-            preparedStatement.setString(9, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
-            preparedStatement.setString(10, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
-            preparedStatement.setString(11, values.get(Columns.PRODUCTS_ID));
+            preparedStatement.setString(1, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
+            preparedStatement.setString(2, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
+            preparedStatement.setString(3, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
+            preparedStatement.setString(4, values.get(Columns.PRODUCTS_ID));
             preparedStatement.execute();
         }
     }
 
     @Override
     public int addNewProduct(Connection connection, Map<String, String> values) throws SQLException {
-        int newProductId = super.addBaseProduct(connection, values);
+        int newProductId = super.addNewProduct(connection, values);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEW_KEYBOARD)) {
             preparedStatement.setInt(1, newProductId);

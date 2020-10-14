@@ -20,6 +20,8 @@ public class BaseProductDAO implements ProductDAO {
     private static final String SQL_GET_PRODUCT_BY_ID = "select * from products where id = ?";
     private static final String SQL_ADD_BASE_PRODUCT = "insert into products (category, producer, name, price, description, active,  img_url) " +
             "values (?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_BASE_PRODUCT = "update products set category = ?, producer = ?, name = ?, price = ?, " +
+            "description = ?, active = ?, img_url =? where id = ?";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseProductDAO.class);
 
@@ -43,12 +45,27 @@ public class BaseProductDAO implements ProductDAO {
 
     @Override
     public void updateProduct(Connection connection, Map<String, String> values) throws SQLException {
-        throw new IllegalArgumentException("Not implemented");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BASE_PRODUCT)) {
+            fillBaseValueToPreparedStatement(values, preparedStatement);
+            preparedStatement.setString(8, values.get(Columns.PRODUCTS_ID));  
+            preparedStatement.execute();
+        }
     }
 
     @Override
     public int addNewProduct(Connection connection, Map<String, String> values) throws SQLException {
-        throw new IllegalArgumentException("Not implemented");
+        int newProductId = 0;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_BASE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
+            fillBaseValueToPreparedStatement(values, preparedStatement);
+            preparedStatement.execute();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                newProductId = resultSet.getInt(1);
+            }
+        }
+        return newProductId;
     }
 
     @Override
@@ -68,21 +85,6 @@ public class BaseProductDAO implements ProductDAO {
         return product;
     }
 
-    int addBaseProduct(Connection connection, Map<String, String> values) throws SQLException {
-        int newProductId = 0;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_BASE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
-            fillBaseValueToPreparedStatement(values, preparedStatement);
-            preparedStatement.execute();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-
-            if (resultSet.next()) {
-                newProductId = resultSet.getInt(1);
-            }
-        }
-        return newProductId;
-    }
-
     void fillBaseProduct(ResultSet resultSet, Product product) throws SQLException {
         product.setId(resultSet.getInt(Columns.PRODUCTS_ID));
         product.setCategory(resultSet.getString(Columns.PRODUCTS_CATEGORY));
@@ -95,7 +97,7 @@ public class BaseProductDAO implements ProductDAO {
         product.setActive(resultSet.getBoolean(Columns.PRODUCTS_ACTIVE));
     }
 
-    void fillBaseValueToPreparedStatement(Map<String, String> values, PreparedStatement preparedStatement) throws SQLException {
+    private void fillBaseValueToPreparedStatement(Map<String, String> values, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, values.get(Columns.PRODUCTS_CATEGORY));
         preparedStatement.setString(2, values.get(Columns.PRODUCTS_PRODUCER));
         preparedStatement.setString(3, values.get(Columns.PRODUCTS_NAME));

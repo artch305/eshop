@@ -82,10 +82,6 @@ public abstract class BaseFilterService implements FilterService {
                     .append(filters.getActive().contains(true) ? 1 : 0);
         }
 
-        if (!filters.getConditionForOrdering().isEmpty()) {
-            newConditions.append(filters.getConditionForOrdering());
-        }
-
         filters.setConditions(newConditions.toString());
         newConditions = new StringBuilder();
     }
@@ -93,7 +89,6 @@ public abstract class BaseFilterService implements FilterService {
     public void applyOrdering(AbstractFilters filters, String orderingBy) {
         filters.setConditionForOrdering(" order by " + ORDERING_CONDITION_MAPPER.get(orderingBy));
         filters.setOrderingName(orderingBy);
-        updateConditions(filters);
     }
 
     public void resetFilters(AbstractFilters filters) {

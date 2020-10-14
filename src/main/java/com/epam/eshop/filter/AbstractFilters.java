@@ -12,6 +12,14 @@ public abstract class AbstractFilters {
     private List<String> producers;
     private List<Boolean> active;
 
+    private String conditions = "";
+
+    private String conditionForOrdering = "";
+    private String orderingName;
+
+    private String delimiterBetweenConditions = " and ";
+    private String delimiterBetweenWords = "', '";
+
     public List<Boolean> getActive() {
         return active;
     }
@@ -20,16 +28,9 @@ public abstract class AbstractFilters {
         this.active = active;
     }
 
-    private String conditions = "";
-    private String conditionForOrdering = "";
-    private String orderingName;
-
     public String getConditions() {
         return conditions;
     }
-
-    private String delimiterBetweenConditions = " and ";
-    private String delimiterBetweenWords = "', '";
 
     abstract public String getFiltersCategory();
 

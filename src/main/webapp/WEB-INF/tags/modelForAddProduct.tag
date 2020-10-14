@@ -156,7 +156,7 @@ if (product instanceof MonitorProduct) {
                             </div>
                             <div class="col-5">
                                 <div class="form-group">
-                                    <input type="text" required class="form-control form-control-sm"
+                                    <input type="text"  class="form-control form-control-sm"
                                            name="lightColor" value="">
                                 </div>
                             </div>

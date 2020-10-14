@@ -134,7 +134,7 @@ public class PrintProductsTag extends TagSupport {
 
                     out.write("<div class=\"form-group\">");
                     out.write("<strong>Image:</strong>");
-                    out.write("<input type=\"hidden\" name=\"destination\"/>");
+                    out.write("<input type=\"hidden\" value=\"img/" + product.getCategory().getDatabaseValue() + "\" name=\"destination\"/>");
                     out.write("<input type=\"file\" class=\"form-control-file border\" name=\"img\">");
                     out.write("</div>");
 

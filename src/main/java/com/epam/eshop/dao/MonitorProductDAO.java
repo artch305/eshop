@@ -21,15 +21,13 @@ public class MonitorProductDAO extends BaseProductDAO {
 
     private static final String SQL_GET_ALL_MONITORS = "SELECT * FROM products " +
             "join monitor_products on products.id = monitor_products.product_id ";
-    private static final String SQL_GET_AMOUNT_ALL_MONITORS = "SELECT count(products.id) FROM products " +
+    private static final String SQL_GET_AMOUNT_ALL_MONITORS = "SELECT count(*) FROM products " +
             "join monitor_products on products.id = monitor_products.product_id ";
     private static final String SQL_GET_MONITOR_BY_ID = "SELECT * FROM products " +
             "join monitor_products on products.id = monitor_products.product_id " +
             "where products.id = ?";
-    private static final String SQL_UPDATE_MONITOR_DATA = "update products join monitor_products on products.id = monitor_products.product_id " +
-            "set category = ?, producer = ?, name = ?, price = ?, description = ?, active = ?, img_url  = ?, " +
-            "diagonal = ?, panel_type = ?, brightness = ? where products.id = ?";
-
+    private static final String SQL_UPDATE_MONITOR_DATA = "update monitor_products " +
+            "set diagonal = ?, panel_type = ?, brightness = ? where product_id = ?";
     private static final String SQL_ADD_NEW_MONITOR = "insert into monitor_products (product_id, diagonal, panel_type, brightness) " +
             "values (?,?,?,?)";
 
@@ -50,7 +48,7 @@ public class MonitorProductDAO extends BaseProductDAO {
 
     @Override
     public List<Product> getProducts(Connection connection, AbstractFilters filters, int startItem) throws SQLException {
-        String query = SQL_GET_ALL_MONITORS + filters.getConditions() + " limit ?," + getProductsOnOnePage();
+        String query = SQL_GET_ALL_MONITORS + filters.getConditions() + filters.getConditionForOrdering() + " limit ?," + getProductsOnOnePage();
         List<Product> monitorProducts = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -83,19 +81,19 @@ public class MonitorProductDAO extends BaseProductDAO {
 
     @Override
     public void updateProduct(Connection connection, Map<String, String> values) throws SQLException {
+        super.updateProduct(connection,values);
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_MONITOR_DATA)) {
-            super.fillBaseValueToPreparedStatement(values, preparedStatement);
-            preparedStatement.setString(8, values.get(Columns.MONITOR_PRODUCTS_DIAGONAL));
-            preparedStatement.setString(9, values.get(Columns.MONITOR_PRODUCTS_PANEL_TYPE));
-            preparedStatement.setString(10, values.get(Columns.MONITOR_PRODUCTS_BRIGHTNESS));
-            preparedStatement.setString(11, values.get(Columns.PRODUCTS_ID));
+            preparedStatement.setString(1, values.get(Columns.MONITOR_PRODUCTS_DIAGONAL));
+            preparedStatement.setString(2, values.get(Columns.MONITOR_PRODUCTS_PANEL_TYPE));
+            preparedStatement.setString(3, values.get(Columns.MONITOR_PRODUCTS_BRIGHTNESS));
+            preparedStatement.setString(4, values.get(Columns.PRODUCTS_ID));
             preparedStatement.execute();
         }
     }
 
     @Override
     public int addNewProduct(Connection connection, Map<String, String> values) throws SQLException {
-        int newProductId = super.addBaseProduct(connection, values);
+        int newProductId = super.addNewProduct(connection, values);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEW_MONITOR)) {
             preparedStatement.setInt(1, newProductId);

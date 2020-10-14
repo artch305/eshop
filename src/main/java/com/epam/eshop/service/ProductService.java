@@ -99,18 +99,24 @@ public class ProductService {
 
         values.put(Columns.PRODUCTS_IMG_URL, imgURL);
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        Connection connection = ConnectionManager.getInstance().getConnection();
+        try {
+            connection.setAutoCommit(false);
             productDAO.updateProduct(connection, values);
+            connection.commit();
             return true;
         } catch (SQLException e) {
+            rollback(connection);
             LOGGER.error("Can't update product |{}|", values.get(Columns.PRODUCTS_PRODUCER) + values.get(Columns.PRODUCTS_NAME), e);
             throw new DBException("Can't update product", e);
+        }finally {
+            applyAutoCommitAndClose(connection);
         }
     }
 
     public int addNewProduct(HttpServletRequest request) {
         Map<String, String> values = getValuesForProducts(request);
-        int newProductId = 0;
+        int newProductId;
 
         String imgURL = uploadImage(request);
         values.put(Columns.PRODUCTS_IMG_URL, imgURL);
@@ -158,11 +164,17 @@ public class ProductService {
 
     private String uploadImage(HttpServletRequest request) {
         String path = request.getParameter("destination");
+
         String newImgURL = "";
 
         try {
             Part filePart = request.getPart("img");
             String fileName = getFileName(filePart);
+
+            if (fileName.isEmpty()){
+                return newImgURL;
+            }
+
             Path dir = Paths.get(path);
             dir.toFile().mkdirs();
             Path createdImageFilePath = dir.resolve(fileName);
@@ -171,8 +183,7 @@ public class ProductService {
             //urlImg = path + "/" + fileName;
             newImgURL = createdImageFilePath.toAbsolutePath().toString();
         } catch (IOException | ServletException e) {
-            LOGGER.error("Can't update product |{}|", request.getParameter("productId"), e);
-            throw new DBException("Upload image for product", e);
+            LOGGER.error("Can't upload image", e);
         }
         return newImgURL;
     }
