@@ -24,8 +24,8 @@ public class PrintProductsInOrderOrCart extends TagSupport {
     private boolean inCart;
     private String contextPath;
     private Order order;
-    String currentLocal;
-    ResourceBundle rb;
+    private String currentLocal;
+    private ResourceBundle rb;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintProductsInOrderOrCart.class);
 
@@ -84,7 +84,7 @@ public class PrintProductsInOrderOrCart extends TagSupport {
                     printEditRemoveViewButtons(out, productEntry, "/cart", "actionCart");
                 } else {
                     if (UserRole.ADMINISTRATOR.equals(user.getUserRole().getRole())) {
-                        printEditRemoveViewButtons(out, productEntry, "/orders/" + order.getId(), "actionOrder");
+                        printEditRemoveViewButtons(out, productEntry, "/orders/" + getOrderId(order), "actionOrder");
                     } else {
                         out.write("<div class=\"col-2\">");
                         out.write("<div class=\"row\">");
@@ -125,7 +125,7 @@ public class PrintProductsInOrderOrCart extends TagSupport {
         out.write("</div>");
         out.write("<div class=\"row\">");
         out.write("<input type=\"hidden\" name=\"productId\" value=\"" + productEntry.getKey().getId() + "\">");
-        out.write("<input type=\"hidden\" name=\"orderId\" value=\"" + order.getId() + "\">");
+        out.write("<input type=\"hidden\" name=\"orderId\" value=\"" + getOrderId(order) + "\">");
         out.write("<input type=\"hidden\" name=\"" + actionName + "\" value=\"changeAmountProduct\">");
         out.write("<button type=\"submit\" class=\"btn btn-light\"><img src=\"" +
                 contextPath + "/img/icons/icons8-edit-64.png\" style=\"max-height: 30px\"></button>");
@@ -143,7 +143,7 @@ public class PrintProductsInOrderOrCart extends TagSupport {
 
         out.write("<input type=\"hidden\" name=\"productId\" value=\"" + productEntry.getKey().getId() + "\">");
 
-        out.write("<input type=\"hidden\" name=\"orderId\" value=\"" + order.getId() + "\">");
+        out.write("<input type=\"hidden\" name=\"orderId\" value=\"" + getOrderId(order) + "\">");
 
         out.write("<input type=\"hidden\" name=\"" + actionName + "\" value=\"removeProduct\">");
         out.write("<button type=\"submit\" class=\"btn btn-danger\"><img src=\"" + contextPath +
@@ -152,6 +152,14 @@ public class PrintProductsInOrderOrCart extends TagSupport {
         out.write("</div>");
         out.write("</div>");
         out.write("</div>");
+    }
+
+    private Integer getOrderId(Order order) {
+        if (order == null) {
+            return null;
+        }
+
+        return order.getId();
     }
 
     private void printViewButton(JspWriter out, Map.Entry<Product, Integer> productEntry) throws IOException {
