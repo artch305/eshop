@@ -1,6 +1,7 @@
 package com.epam.eshop.service;
 
 
+import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.exception.DBException;
 import com.epam.eshop.dao.Columns;
 import com.epam.eshop.dao.ConnectionManager;
@@ -22,7 +23,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,26 +32,29 @@ import java.util.Map;
  */
 public class ProductService {
 
-    private ProductDAO productDAO;
+    private final ProductDAO productDAO;
+    private final ConnectionManager connectionManager;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
     public ProductService(String category) {
-        productDAO = ProductDAOFactory.getProductDAO(category);
+        this(ProductDAOFactory.getProductDAO(category), ConnectionManager.getInstance());
     }
 
+    public ProductService(ProductDAO productDAO, ConnectionManager connectionManager) {
+        this.productDAO = productDAO;
+        this.connectionManager = connectionManager;
+    }
 
     public List<Product> getProducts(AbstractFilters filters, String page, String ProductsOnPage) {
-        int startItem;
-
         if (ProductsOnPage != null && !ProductsOnPage.trim().isEmpty()) {
             productDAO.setProductsOnOnePage(Integer.parseInt(ProductsOnPage));
         }
 
-        List<Product> products = new ArrayList<>();
-        startItem = getNumberOfStartItem(page);
+        int startItem = getNumberOfStartItem(page);
+        List<Product> products;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             products = productDAO.getProducts(connection, filters, startItem);
         } catch (SQLException e) {
             LOGGER.error("Can't obtain products", e);
@@ -78,8 +81,8 @@ public class ProductService {
     }
 
     public Product getProduct(String productId) {
-        Product product = null;
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        Product product;
+        try (Connection connection = connectionManager.getConnection()) {
             product = productDAO.getProductById(connection, productId);
         } catch (SQLException e) {
             LOGGER.error("Can't get product |{}|", productId, e);
@@ -99,11 +102,12 @@ public class ProductService {
 
         values.put(Columns.PRODUCTS_IMG_URL, imgURL);
 
-        Connection connection = ConnectionManager.getInstance().getConnection();
+        Connection connection = connectionManager.getConnection();
         try {
             connection.setAutoCommit(false);
             productDAO.updateProduct(connection, values);
             connection.commit();
+            request.getSession().setAttribute(AttributesNames.SUCCESS, "success");
             return true;
         } catch (SQLException e) {
             rollback(connection);
@@ -121,8 +125,9 @@ public class ProductService {
         String imgURL = uploadImage(request);
         values.put(Columns.PRODUCTS_IMG_URL, imgURL);
 
-        Connection connection = ConnectionManager.getInstance().getConnection();
+        Connection connection = null;
         try {
+            connection = connectionManager.getConnection();
             connection.setAutoCommit(false);
             newProductId = productDAO.addNewProduct(connection, values);
             connection.commit();
@@ -131,7 +136,9 @@ public class ProductService {
             LOGGER.error("Can't add new product |{}|", values.get(Columns.PRODUCTS_PRODUCER) + values.get(Columns.PRODUCTS_NAME), e);
             throw new DBException("Can't add new product", e);
         } finally {
-            applyAutoCommitAndClose(connection);
+            if (connection != null){
+                applyAutoCommitAndClose(connection);
+            }
         }
 
         return newProductId;
@@ -191,7 +198,7 @@ public class ProductService {
     public int getMaxItems(AbstractFilters currentUserFilters) {
         int maxItems = 0;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             maxItems = productDAO.getAmountAllProducts(connection, currentUserFilters);
         } catch (SQLException e) {
             LOGGER.error("Can't get maxItems", e);

@@ -22,10 +22,10 @@ public class AccessFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        User user = (User) request.getSession(true).getAttribute("currentUser");
+        User user = (User) request.getSession(true).getAttribute("currentUser"); // TODO: 14.10.2020 to attributes and params constants
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/main");
+            response.sendRedirect(request.getContextPath() + "/main"); // TODO: 14.10.2020 to url constants
         } else {
             chain.doFilter(req, resp);
         }

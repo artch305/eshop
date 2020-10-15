@@ -1,12 +1,18 @@
-package com.epam.eshop.service.cart;
+package com.epam.eshop.controller.cart;
 
 
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.dao.BaseProductDAO;
 import com.epam.eshop.dao.ConnectionManager;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
+import com.epam.eshop.exception.DBException;
 import com.epam.eshop.service.CartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
@@ -18,22 +24,29 @@ import java.util.Map;
  */
 class AddToCartAction implements CartActionHandler {
 
+    private BaseProductDAO productDAO;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddToCartAction.class);
+
+    public AddToCartAction() {
+        productDAO = new BaseProductDAO();
+    }
+
     @Override
     public boolean execute(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("currentUser");
-        Cart currentUserCart = (Cart) request.getSession().getAttribute("currentUserCart");
-        int productId = Integer.parseInt(request.getParameter("productId"));
+        User user = Util.getUserFromSession(request.getSession());
+        Cart currentUserCart = Util.getCartFromSession(request.getSession());
+        int productId = Integer.parseInt(request.getParameter(ParameterNames.PRODUCT_ID));
         Map<Product, Integer> productsInCart = currentUserCart.getProductsInCart();
         boolean success;
 
-        BaseProductDAO productDAO = new BaseProductDAO();
-        Product product = null;
-
+        Product product;
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             product = productDAO.getProductById(connection, String.valueOf(productId));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Can't add product |{}| to cart", productId, e);
+            throw new DBException("Can't add product to cart", e);
         }
 
         CartService cartService = new CartService();

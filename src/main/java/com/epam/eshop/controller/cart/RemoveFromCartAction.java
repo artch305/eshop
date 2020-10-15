@@ -1,5 +1,7 @@
-package com.epam.eshop.service.cart;
+package com.epam.eshop.controller.cart;
 
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
@@ -15,9 +17,9 @@ class RemoveFromCartAction implements CartActionHandler {
 
     @Override
     public boolean execute(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("currentUser");
-        Cart currentUserCart = (Cart) request.getSession().getAttribute("currentUserCart");
-        int productId = Integer.parseInt(request.getParameter("productId"));
+        User user = Util.getUserFromSession(request.getSession());
+        Cart currentUserCart = Util.getCartFromSession(request.getSession());
+        int productId = Integer.parseInt(request.getParameter(ParameterNames.PRODUCT_ID));
 
         CartService cartService = new CartService();
         boolean success;

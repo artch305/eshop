@@ -31,7 +31,7 @@
                         <li class="nav-item">
                             <a href="${pageContext.request.contextPath}/users"
                                     <c:choose>
-                                        <c:when test="${'users'.equals(param.currentPage)}">
+                                        <c:when test="${'users'.equals(param.activePage)}">
                                             class="nav-link active"
                                         </c:when>
                                         <c:otherwise>
@@ -43,7 +43,7 @@
                         <li class="nav-item">
                             <a  href="${pageContext.request.contextPath}/orders"
                                     <c:choose>
-                                        <c:when test="${'orders'.equals(param.currentPage)}">
+                                        <c:when test="${'orders'.equals(param.activePage)}">
                                             class="nav-link active"
                                         </c:when>
                                         <c:otherwise>
@@ -53,7 +53,7 @@
                             ><fmt:message key="showOrders"/></a>
                         </li>
                         <li class="nav-item">
-                            <a href="${pageContext.request.contextPath}/login?currentPageForReturn=${param.currentPageForReturn}" class="nav-link" role="button"><fmt:message
+                            <a href="${pageContext.request.contextPath}/logout?currentPageForReturn=${param.currentPageForReturn}" class="nav-link" role="button"><fmt:message
                                     key="SingOut"/></a>
                         </li>
                     </ul>

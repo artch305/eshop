@@ -14,7 +14,7 @@ public interface FilterService {
 
     AbstractFilters getFiltersForUser(User user);
 
-    String getFiltersCategory();
+    String getFiltersCategory(); // TODO: 14.10.2020 remove or use
 
     void updateFilters(AbstractFilters filters, HttpServletRequest request);
 
@@ -22,7 +22,7 @@ public interface FilterService {
 
     void applyOrdering(AbstractFilters filters, String orderingBy);
 
-    Map<String, List<String>> getAllValuesForFilters(AbstractFilters filters);
+    Map<String, List<String>> getAllValuesForFilters(AbstractFilters filters); // TODO: 14.10.2020 try to use object in return value instead of map of lists
 
 
 }

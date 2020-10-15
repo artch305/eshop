@@ -1,5 +1,7 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.service.UserService;
 
@@ -17,23 +19,25 @@ import java.io.IOException;
 @WebServlet("/lang")
 public class LanguageServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private UserService userService;
 
+    public LanguageServlet() {
+        userService = new UserService();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String language = request.getParameter("lang");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String language = request.getParameter(AttributesNames.LANGUAGE);
 
         HttpSession session = request.getSession();
-        session.setAttribute("lang", language);
+        session.setAttribute(AttributesNames.LANGUAGE, language);
 
-        User user = (User) session.getAttribute("currentUser");
+        User user = Util.getUserFromSession(session);
 
         if (user != null) {
-            UserService userService = new UserService();
+            userService = new UserService();
             userService.updateUserLang(user, language);
         }
 
-        response.sendRedirect(request.getContextPath() + "/main"); // TODO: 28.09.2020 remove? or leave if used only from JS
+        response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
     }
 }

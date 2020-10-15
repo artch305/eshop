@@ -16,7 +16,7 @@
 
 <div class="container p-3 my-3 border">
     <form action="${pageContext.request.contextPath}/products" method="post">
-        <input type="hidden" name="action" value="applyFilters">
+        <input type="hidden" name="actionFilters" value="applyFilters">
         <div class="row" style="margin: 10px 10px">
             <h3><span class="badge badge-pill badge-success"><fmt:message key="filters.title"/></span></h3>
         </div>
@@ -114,7 +114,7 @@
     </form>
     <div class="row">
         <form id="reset" action="${pageContext.request.contextPath}/products" method="post">
-            <input type="hidden" name="action" value="resetFilters">
+            <input type="hidden" name="actionFilters" value="resetFilters">
             <button type="submit" class="btn btn-info" style="margin-left:  10px"><fmt:message key="filters.reset"/></button>
         </form>
     </div>

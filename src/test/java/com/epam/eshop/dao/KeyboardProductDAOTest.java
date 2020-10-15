@@ -1,9 +1,6 @@
 package com.epam.eshop.dao;
 
-import com.epam.eshop.entity.Category;
-import com.epam.eshop.entity.MonitorProduct;
-import com.epam.eshop.entity.Product;
-import com.epam.eshop.entity.User;
+import com.epam.eshop.entity.*;
 import com.epam.eshop.filter.AbstractFilters;
 import com.epam.eshop.filter.FilterService;
 import com.epam.eshop.filter.service.FilterServiceFactory;
@@ -16,18 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 /**
- * Created by artch on 14.10.2020.
+ * Created by artch on 15.10.2020.
  */
-public class MonitorProductDAOTest extends AbstractTest {
-    private static MonitorProductDAO monitorProductDAO;
+public class KeyboardProductDAOTest extends AbstractTest {
+
+    private static KeyboardProductDAO keyboardProductDAO;
 
     @BeforeClass
-    public static void initMonitorProductDAOTest (){
-        monitorProductDAO = new MonitorProductDAO();
+    public static void initKeyboardProductDAOTest (){
+        keyboardProductDAO = new KeyboardProductDAO();
     }
 
     @Test
@@ -39,9 +36,9 @@ public class MonitorProductDAOTest extends AbstractTest {
         AbstractFilters filters = filterService.getFiltersForUser(user);
 
         // FUNCTIONALITY
-        int amountMonitors = monitorProductDAO.getAmountAllProducts(connection,filters);
+        int amountMonitors = keyboardProductDAO.getAmountAllProducts(connection,filters);
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select count(product_id) from monitor_products group by product_id" );
+        ResultSet resultSet = statement.executeQuery("select count(product_id) from keyboard_products group by product_id" );
         int expectedAmount = -1;
         if (resultSet.next()){
             expectedAmount = resultSet.getInt(1);
@@ -53,16 +50,17 @@ public class MonitorProductDAOTest extends AbstractTest {
     @Test
     public void testGetProducts() throws Exception {
         // PREDICATE
-        FilterService filterService = FilterServiceFactory.getFilterService(Category.MONITORS.getDatabaseValue());
+        FilterService filterService = FilterServiceFactory.getFilterService(Category.KEYBOARDS.getDatabaseValue());
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(connection,1);
         AbstractFilters filters = filterService.getFiltersForUser(user);
         int startItem = 0;
         int productsOnPage = 10;
         // FUNCTIONALITY
-        List<Product> products = monitorProductDAO.getProducts(connection,filters,startItem);
-        monitorProductDAO.setProductsOnOnePage(productsOnPage);
-        List<Product> products2 = monitorProductDAO.getProducts(connection,filters,startItem);
+        List<Product> products = keyboardProductDAO.getProducts(connection,filters,startItem);
+        keyboardProductDAO.setProductsOnOnePage(productsOnPage);
+        List<Product> products2 = keyboardProductDAO.getProducts(connection,filters,startItem);
+        keyboardProductDAO.setProductsOnOnePage(5);
         // TESTS
         assertEquals(5,products.size());
         assertEquals(productsOnPage,products2.size());
@@ -71,23 +69,22 @@ public class MonitorProductDAOTest extends AbstractTest {
     @Test
     public void testGetProductById() throws Exception {
         // PREDICATE
-        MonitorProductDAO monitorProductDAO = new MonitorProductDAO();
-        String productId = "1";
+        String productId = "2";
 
         // FUNCTIONALITY
-        Product product = monitorProductDAO.getProductById(connection,productId);
+        Product product = keyboardProductDAO.getProductById(connection,productId);
 
         // TESTS
-        assertEquals("Samsung" ,product.getProducer());
-        assertEquals("S22R350FHN" ,product.getName());
+        assertEquals("Logitech" ,product.getProducer());
+        assertEquals("MK270" ,product.getName());
+
     }
 
     @Test
     public void testUpdateProduct() throws Exception {
         // PREDICATE
-        MonitorProductDAO monitorProductDAO = new MonitorProductDAO();
-        String productId = "3";
-        Product product = monitorProductDAO.getProductById(connection, productId);
+        String productId = "5";
+        Product product = keyboardProductDAO.getProductById(connection, productId);
         String newProductName = "qwe";
         String newProductDescription = "any description";
         Map<String,String> values = new HashMap<String, String>(){{
@@ -98,14 +95,14 @@ public class MonitorProductDAOTest extends AbstractTest {
             put(Columns.PRODUCTS_PRICE, String.valueOf(product.getPrice()));
             put(Columns.PRODUCTS_DESCRIPTION, newProductDescription);
             put(Columns.PRODUCTS_ACTIVE, "1");
-            put(Columns.MONITOR_PRODUCTS_DIAGONAL, "24");
-            put(Columns.MONITOR_PRODUCTS_PANEL_TYPE, "");
-            put(Columns.MONITOR_PRODUCTS_BRIGHTNESS, "1");
+            put(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE, "USB");
+            put(Columns.KEYBOARD_PRODUCTS_MECHANICAL, "1");
+            put(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR, "RGB");
             put(Columns.PRODUCTS_IMG_URL, "");
         }};
         // FUNCTIONALITY
-        monitorProductDAO.updateProduct(connection, values);
-        Product changedProduct = monitorProductDAO.getProductById(connection, productId);
+        keyboardProductDAO.updateProduct(connection, values);
+        Product changedProduct = keyboardProductDAO.getProductById(connection, productId);
 
         // TESTS
         assertEquals(newProductName, changedProduct.getName());
@@ -121,27 +118,26 @@ public class MonitorProductDAOTest extends AbstractTest {
         String price = "256.12";
         String description = "";
         String active = "1";
-        String diagonal = "27.0";
-        String panelType = "IPS";
-        String brightness = "200";
+        String connectionType = "PS/2";
+        String mechanical = "0";
+        String lightColor = "RED";
         String imgUrl = "";
 
-        MonitorProductDAO monitorProductDAO = new MonitorProductDAO();
         Map<String,String> values = new HashMap<String, String>(){{
-            put(Columns.PRODUCTS_CATEGORY, Category.MONITORS.getDatabaseValue());
+            put(Columns.PRODUCTS_CATEGORY, Category.KEYBOARDS.getDatabaseValue());
             put(Columns.PRODUCTS_PRODUCER, producer);
             put(Columns.PRODUCTS_NAME, name);
             put(Columns.PRODUCTS_PRICE, price);
             put(Columns.PRODUCTS_DESCRIPTION, description);
             put(Columns.PRODUCTS_ACTIVE, active);
-            put(Columns.MONITOR_PRODUCTS_DIAGONAL, diagonal);
-            put(Columns.MONITOR_PRODUCTS_PANEL_TYPE, panelType);
-            put(Columns.MONITOR_PRODUCTS_BRIGHTNESS, brightness);
+            put(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE, connectionType);
+            put(Columns.KEYBOARD_PRODUCTS_MECHANICAL, mechanical);
+            put(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR, lightColor);
             put(Columns.PRODUCTS_IMG_URL, imgUrl);
         }};
         // FUNCTIONALITY
-        int newMonitorId = monitorProductDAO.addNewProduct(connection,values);
-        Product newProduct = monitorProductDAO.getProductById(connection,String.valueOf(newMonitorId));
+        int newMonitorId = keyboardProductDAO.addNewProduct(connection,values);
+        Product newProduct = keyboardProductDAO.getProductById(connection,String.valueOf(newMonitorId));
 
         // TESTS
         assertNotEquals(0, newMonitorId);
@@ -149,9 +145,9 @@ public class MonitorProductDAOTest extends AbstractTest {
         assertEquals(name, newProduct.getName());
         assertEquals(price, String.valueOf(newProduct.getPrice()));
         assertEquals(description, newProduct.getDescription());
-        MonitorProduct monitorProduct = (MonitorProduct) newProduct;
-        assertEquals(diagonal, String.valueOf(monitorProduct.getDiagonal()));
-        assertEquals(panelType, monitorProduct.getPanelType());
-        assertEquals(brightness, String.valueOf(monitorProduct.getBrightness()));
+        KeyboardProduct keyboardProduct = (KeyboardProduct) newProduct;
+        assertEquals(connectionType, String.valueOf(keyboardProduct.getConnectionType()));
+        assertFalse(keyboardProduct.isMechanical());
+        assertEquals(lightColor, String.valueOf(keyboardProduct.getLightColor()));
     }
 }

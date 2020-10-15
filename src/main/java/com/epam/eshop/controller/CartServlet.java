@@ -1,9 +1,12 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
-import com.epam.eshop.service.cart.CartActionFactory;
-import com.epam.eshop.service.cart.CartActionHandler;
+import com.epam.eshop.controller.cart.CartActionFactory;
+import com.epam.eshop.controller.cart.CartActionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,13 +23,13 @@ import java.io.IOException;
 public class CartServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String actionName = request.getParameter("actionCart");
+        String actionName = request.getParameter(ParameterNames.ACTION_NAME_FOR_CART);
 
         CartActionHandler cartAction = CartActionFactory.getAction(actionName);
         boolean success = cartAction.execute(request);
 
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/cart");
+            response.sendRedirect(request.getContextPath() + URLConstants.CART);
         } else {
             response.sendError(500);
         }
@@ -35,14 +38,15 @@ public class CartServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        User currentUser = (User) request.getSession().getAttribute("currentUser");
-        String currentUserRole = currentUser.getUserRole().getRole();
+        User currentUser = (User) request.getSession().getAttribute(AttributesNames.CURRENT_USER);
 
-        if (!UserRole.CUSTOMER.equals(currentUserRole)) {
-            response.sendRedirect(request.getContextPath() + "/main");
+        if (!Util.checkUserRole(currentUser, UserRole.CUSTOMER)) {
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
             return;
         }
 
-        request.getRequestDispatcher("/jsp/cart.jsp").forward(request, response);
+        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+
+        request.getRequestDispatcher(URLConstants.CART_JSP).forward(request, response);
     }
 }

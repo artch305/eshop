@@ -11,12 +11,10 @@ import java.util.List;
  */
 public class FiltersMonitorProducts extends AbstractFilters {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FiltersMonitorProducts.class);
-
     private int brightness;
     private List<String> diagonals;
     private List<String> panelTypes;
-    private String filtersCategory = Category.MONITORS.getDatabaseValue();
+    private final String filtersCategory = Category.MONITORS.getDatabaseValue();
 
     @Override
     public String getFiltersCategory() {

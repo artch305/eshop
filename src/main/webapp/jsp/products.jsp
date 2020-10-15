@@ -1,10 +1,10 @@
-<%@ page import="java.util.ResourceBundle" %>
-<%@ page import="java.util.Locale" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="customTags" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="fctg" %>
 <html>
 <head>
     <title>Products</title>
@@ -28,6 +28,11 @@
     <c:import
             url="jspComponent/head.jsp?currentPageForReturn=${pageContext.request.contextPath}/products?category=${pageContext.request.getParameter(categoryParamName)}"/>
 
+    <c:if test="${requestScope.success != null}">
+        <div class="alert alert-success">
+            <strong><fmt:message key="success"/></strong><fmt:message key="successMessage"/>
+        </div>
+    </c:if>
     <div class="container-fluid">
         <div class="row">
 
@@ -54,7 +59,7 @@
                         <div class="row" style="margin-top: 15px">
                             <form action="${pageContext.request.contextPath}/products"
                                   method="post">
-                                <input type="hidden" name="action" value="changeOrdering">
+                                <input type="hidden" name="actionFilters" value="changeOrdering">
                                 <div class="form-inline">
                                     <div class="col-7" style=" margin-right: 5px;">
                                         <select name="orderingBy" class="form-control">
@@ -98,7 +103,7 @@
                         <div class="row" style="margin-top: 15px">
                             <form action="${pageContext.request.contextPath}/products"
                                   method="post">
-                                <input type="hidden" name="action" value="changeProductsOnPage">
+                                <input type="hidden" name="actionFilters" value="changeProductsOnPage">
                                 <div class="form-inline">
                                     <div class="col-5" style=" margin-right: 15px;">
                                         <select name="productsOnPage" class="form-control">
@@ -136,70 +141,21 @@
                     </div>
                 </div>
 
+                <c:forEach var="product" items="${sessionScope.products}">
+                    <fctg:printProduct product="${product}">
 
-                <ctg:printProducts products="${sessionScope.products}">
+                    </fctg:printProduct>
+                </c:forEach>
 
-                </ctg:printProducts>
             </div>
         </div>
     </div>
 
     <div class="container">
         <ul class="pagination justify-content-center">
-            <%
-                int maxItems = (int) request.getSession().getAttribute("maxItems");
-                int pages;
-                int productsOnPage = 5;
-                String productsOnPageParam = (String) session.getAttribute("productsOnPage");
+            <fctg:pagination maxItems="${sessionScope.maxItems}" productsOnPage="${sessionScope.productsOnPage}">
 
-                String currentLocal;
-
-                if (session.getAttribute("lang") == null) {
-                    currentLocal = request.getLocale().getLanguage();
-                    session.setAttribute("lang", currentLocal);
-                }
-                ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag((String) session.getAttribute("lang")));
-
-                if (productsOnPageParam != null && !productsOnPageParam.isEmpty()) {
-                    productsOnPage = Integer.parseInt(productsOnPageParam);
-                }
-
-                if (maxItems % productsOnPage > 0) {
-                    pages = maxItems / productsOnPage + 1;
-                } else {
-                    pages = maxItems / productsOnPage;
-                }
-
-                int currentPage = 0;
-                String category = request.getParameter("category");
-                String currentPageParam = request.getParameter("page");
-
-                if (currentPageParam != null) {
-                    try {
-                        currentPage = Integer.parseInt(request.getParameter("page"));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (currentPage <= 0) {
-                    currentPage = 1;
-                }
-
-                out.write("<li class=\"page-item " + (currentPage > 1 ? "" : "disabled") + "\">" +
-                        "<a class=\"page-link\" href=\"" +
-                        request.getContextPath() + "/products?category=" + category + "&page=" + (currentPage - 1) + "\">" + resourceBundle.getString("products.previous") + "</a></li>");
-
-                for (int i = 1; i <= pages; i++) {
-                    out.write("<li class=\"page-item " + (currentPage == i ? "active" : "") + "\"><a class=\"page-link\" href=\"" +
-                            request.getContextPath() + "/products?category=" + category + "&page=" + i + "\">" + i + "</a></li>");
-                }
-
-                out.write("<li class=\"page-item " + (currentPage < pages ? "" : "disabled") + "\">" +
-                        "<a class=\"page-link\" href=\"" +
-                        request.getContextPath() + "/products?category=" + category + "&page=" + (currentPage + 1) + "\">" + resourceBundle.getString("products.next") + "</a></li>");
-
-            %>
+            </fctg:pagination>
         </ul>
     </div>
 </fmt:bundle>
@@ -213,6 +169,8 @@
 
         $.post(addUrl, formElement.serializeArray())
             .done(function (resp) {
+                var newUserCart = $($.parseHTML(resp)).filter("#userCart").html();
+                $('#userCart').html(newUserCart);
             })
             .fail(function (err) {
                 console.log(err);

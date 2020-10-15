@@ -95,6 +95,7 @@ public class BaseProductDAO implements ProductDAO {
         product.setAddedDate(resultSet.getString(Columns.PRODUCTS_ADDED_DATE));
         product.setImgURL(resultSet.getString(Columns.PRODUCTS_IMG_URL));
         product.setActive(resultSet.getBoolean(Columns.PRODUCTS_ACTIVE));
+        LOGGER.info("Product |{}| has been filled", product.getProducer()+ " " + product.getName());
     }
 
     private void fillBaseValueToPreparedStatement(Map<String, String> values, PreparedStatement preparedStatement) throws SQLException {
@@ -105,5 +106,7 @@ public class BaseProductDAO implements ProductDAO {
         preparedStatement.setString(5, values.get(Columns.PRODUCTS_DESCRIPTION));
         preparedStatement.setString(6, values.get(Columns.PRODUCTS_ACTIVE));
         preparedStatement.setString(7, values.get(Columns.PRODUCTS_IMG_URL));
+        LOGGER.info("prepareStatement has been filled by |{}|", values.get(Columns.PRODUCTS_PRODUCER) + " " +
+                values.get(Columns.PRODUCTS_NAME));
     }
 }

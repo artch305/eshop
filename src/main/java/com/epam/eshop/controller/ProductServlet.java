@@ -1,5 +1,8 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.service.ProductService;
 
@@ -10,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by artch on 01.10.2020.
@@ -24,14 +25,11 @@ public class ProductServlet extends HttpServlet {
     private static final String PRODUCT_ACTION_ADD = "addProduct";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("productAction");
-        String category = request.getParameter("category");
-        ProductService productService = new ProductService(category);
-        String returnPath = request.getParameter("returnPath");
+        String returnPath = Util.getReturnPath(request);
 
-        if (returnPath == null || returnPath.trim().isEmpty()) {
-            returnPath = request.getContextPath() + "/main";
-        }
+        String action = request.getParameter(ParameterNames.PRODUCT_ACTION);
+        String category = request.getParameter(ParameterNames.CATEGORY);
+        ProductService productService = new ProductService(category);
 
         boolean success = false;
 
@@ -39,11 +37,8 @@ public class ProductServlet extends HttpServlet {
             success = productService.updateProductData(request);
         } else if (PRODUCT_ACTION_ADD.equals(action)) {
             int newProductId = productService.addNewProduct(request);
-
-            if (newProductId != 0) {
-                returnPath += newProductId;
-                success = true;
-            }
+            returnPath += newProductId;
+            success = true;
         }
 
         if (success) {
@@ -54,20 +49,15 @@ public class ProductServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Pattern pattern = Pattern.compile("[a-zA-Z]+(?=/[0-9]+)");
-        Matcher matcher = pattern.matcher(request.getRequestURI());
-        String category = "";
+        String category = Util.getCategoryFromURL(request.getRequestURI());
 
-        if (matcher.find()) {
-            category = matcher.group();
-        }
-
-        String id = request.getPathInfo();
-        id = id.replace("/" + category + "/", "");
+        String id = Util.getIdFromURL(request.getPathInfo());
 
         ProductService productService = new ProductService(category);
         Product currentProduct = productService.getProduct(id);
-        request.setAttribute("currentProduct", currentProduct);
-        request.getRequestDispatcher("/jsp/viewProduct.jsp").forward(request, response);
+        request.setAttribute(AttributesNames.CURRENT_PRODUCT, currentProduct);
+        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+
+        request.getRequestDispatcher(URLConstants.VIEW_PRODUCT).forward(request, response);
     }
 }

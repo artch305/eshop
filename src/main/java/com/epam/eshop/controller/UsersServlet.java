@@ -1,5 +1,8 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
 import com.epam.eshop.service.UserService;
@@ -17,40 +20,49 @@ import java.util.List;
  */
 @WebServlet("/users")
 public class UsersServlet extends HttpServlet {
+
+    private UserService userService;
+
+    public UsersServlet() {
+        userService = new UserService();
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserService userService = new UserService();
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String newLogin = request.getParameter("login").trim();
-        String newEmail = request.getParameter("email").trim();
-        String newPassword = request.getParameter("password").trim();
-        int newUserStatusId = Integer.parseInt(request.getParameter("status"));
-        int newUserRoleId = Integer.parseInt(request.getParameter("role"));
+        int userId = Integer.parseInt(request.getParameter(ParameterNames.USER_ID));
+        String newLogin = request.getParameter(ParameterNames.LOGIN).trim();
+        String newEmail = request.getParameter(ParameterNames.EMAIL).trim();
+        String newPassword = request.getParameter(ParameterNames.PASSWORD).trim();
+        int newUserStatusId = Integer.parseInt(request.getParameter(ParameterNames.USER_STATUS));
+        int newUserRoleId = Integer.parseInt(request.getParameter(ParameterNames.USER_ROLE)); // TODO: 14.10.2020 wrap all these parameters into DTO (data-transfer object) to hold and transfer it and reduce amount of parameters in method signature
 
         String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRoleId);
 
         if (errorMessage == null) {
-            response.sendRedirect("users");
+            request.getSession().setAttribute(AttributesNames.SUCCESS, "success");
+            response.sendRedirect(request.getContextPath() + URLConstants.USERS);
         } else {
-            request.setAttribute("errorMessage", errorMessage);
-            request.setAttribute("users", userService.getAllUsers());
-            request.setAttribute("userIdWithError", userId);
-            request.getRequestDispatcher("/jsp/users.jsp").forward(request, response);
+            request.setAttribute(AttributesNames.ERROR_MESSAGE, errorMessage);
+            request.setAttribute(AttributesNames.USERS, userService.getAllUsers());
+            request.setAttribute(AttributesNames.USER_ID_WITH_ERROR, userId);
+            
+            request.getRequestDispatcher(URLConstants.USERS_JSP).forward(request, response);
         }
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("currentUser");
+        User user = Util.getUserFromSession(request.getSession());
 
-        if (!UserRole.ADMINISTRATOR.equals(user.getUserRole().getRole())) {
-            response.sendRedirect(request.getContextPath() + "/main");
+        if (!Util.checkUserRole(user,UserRole.ADMINISTRATOR)) {
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
             return;
         }
 
-        UserService userService = new UserService();
         List<User> users = userService.getAllUsers();
+        request.setAttribute(AttributesNames.USERS, users);
 
-        request.setAttribute("users", users);
-        request.getRequestDispatcher("/jsp/users.jsp").forward(request, response);
+        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+        
+        request.getRequestDispatcher(URLConstants.USERS_JSP).forward(request, response);
     }
 }

@@ -17,11 +17,15 @@ import java.sql.SQLException;
  */
 public class CartService {
 
+    private CartDAO cartDAO;
+
+    public CartService() {
+        cartDAO = new CartDAO();
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CartService.class);
 
     public boolean addProduct(User user, Product product) {
-        CartDAO cartDAO = new CartDAO();
-
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             cartDAO.addProduct(connection, user.getId(), product.getId());
             return true;
@@ -32,7 +36,6 @@ public class CartService {
     }
 
     public void fillCurrentUserCart(User user, Cart currentUserCart) {
-        CartDAO cartDAO = new CartDAO();
         currentUserCart.setUserId(user.getId());
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
@@ -44,8 +47,6 @@ public class CartService {
     }
 
     public boolean setAmount(User user, Product product, int amount) {
-        CartDAO cartDAO = new CartDAO();
-
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             cartDAO.setAmount(connection, user.getId(), product.getId(), amount);
             return true;
@@ -57,8 +58,6 @@ public class CartService {
     }
 
     public boolean removeProduct(User user, Product product) {
-        CartDAO cartDAO = new CartDAO();
-
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             cartDAO.removeProduct(connection, user.getId(), product.getId());
             return true;

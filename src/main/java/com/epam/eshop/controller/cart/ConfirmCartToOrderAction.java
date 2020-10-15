@@ -1,5 +1,7 @@
-package com.epam.eshop.service.cart;
+package com.epam.eshop.controller.cart;
 
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.service.OrderService;
@@ -13,12 +15,12 @@ public class ConfirmCartToOrderAction implements CartActionHandler {
 
     @Override
     public boolean execute(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("currentUser");
-        Cart currentUserCart = (Cart) request.getSession().getAttribute("currentUserCart");
+        User user = Util.getUserFromSession(request.getSession());
+        Cart currentUserCart = Util.getCartFromSession(request.getSession());
         OrderService orderService = new OrderService();
 
         boolean success = orderService.setOrder(user, currentUserCart);
-        request.setAttribute("success", success);
+        request.getSession().setAttribute("success", success);
 
         return success;
     }

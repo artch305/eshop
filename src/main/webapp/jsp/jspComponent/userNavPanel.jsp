@@ -9,7 +9,7 @@
 </c:if>
 
 <fmt:bundle basename="messages" prefix="userNavPanel.">
-    <div class="container-fluid">
+    <div class="container-fluid" id="userCart">
         <div class="row">
 
             <div class="col-8" style="margin: 10px 10px">
@@ -20,37 +20,42 @@
                                 <fmt:message key="products"/>
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/products?category=monitors"><fmt:message key="showMonitors"/></a>
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/products?category=keyboards"><fmt:message key="showKeyboards"/></a>
+                                <a class="dropdown-item"
+                                   href="${pageContext.request.contextPath}/products?category=monitors"><fmt:message
+                                        key="showMonitors"/></a>
+                                <a class="dropdown-item"
+                                   href="${pageContext.request.contextPath}/products?category=keyboards"><fmt:message
+                                        key="showKeyboards"/></a>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a  href="${pageContext.request.contextPath}/orders"
-                                <c:choose>
-                                    <c:when test="${'orders'.equals(param.currentPage)}">
-                                        class="nav-link active"
-                                    </c:when>
-                                    <c:otherwise>
-                                        class="nav-link"
-                                    </c:otherwise>
-                                </c:choose>
-                            ><fmt:message key="showMyOrders"/></a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="${pageContext.request.contextPath}/cart"
+                            <a href="${pageContext.request.contextPath}/orders"
                                     <c:choose>
-                                        <c:when test="${'cart'.equals(param.currentPage)}">
+                                        <c:when test="${'orders'.equals(param.activePage)}">
                                             class="nav-link active"
                                         </c:when>
                                         <c:otherwise>
                                             class="nav-link"
                                         </c:otherwise>
                                     </c:choose>
-                            ><fmt:message key="showCart"/></a>
+                            ><fmt:message key="showMyOrders"/></a>
                         </li>
-
+                            <li class="nav-item">
+                                <a href="${pageContext.request.contextPath}/cart"
+                                        <c:choose>
+                                            <c:when test="${'cart'.equals(param.activePage)}">
+                                                class="nav-link active"
+                                            </c:when>
+                                            <c:otherwise>
+                                                class="nav-link"
+                                            </c:otherwise>
+                                        </c:choose>
+                                ><fmt:message key="showCart"/><span class="badge badge-light"
+                                                                    style="margin-left: 5px">${sessionScope.currentUserCart.getAllAmountProductsInCart()}</span></a>
+                            </li>
                         <li class="nav-item">
-                            <a href="${pageContext.request.contextPath}/login?currentPageForReturn=${param.currentPageForReturn}" class="nav-link" role="button"><fmt:message
+                            <a href="${pageContext.request.contextPath}/logout?currentPageForReturn=${param.currentPageForReturn}"
+                               class="nav-link" role="button"><fmt:message
                                     key="SingOut"/></a>
                         </li>
                     </ul>

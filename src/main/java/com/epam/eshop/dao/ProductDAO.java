@@ -15,7 +15,7 @@ public interface ProductDAO {
 
     int getAmountAllProducts(Connection connection, AbstractFilters filters) throws SQLException;
 
-    List<Product> getProducts(Connection connection, AbstractFilters filters, int page) throws SQLException;
+    List<Product> getProducts(Connection connection, AbstractFilters filters, int startItem) throws SQLException;
 
     Product getProductById(Connection connection, String id) throws SQLException;
 

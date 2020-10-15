@@ -14,6 +14,7 @@ public class Order {
     private String lastUpdateDate;
     private OrderStatus orderStatus;
     private String userEmail;
+    private Map<Product, Integer> products; //value is amount of products
 
     public int getId() {
         return id;
@@ -70,8 +71,6 @@ public class Order {
     public void setProducts(Map<Product, Integer> products) {
         this.products = products;
     }
-
-    private Map<Product, Integer> products; //value is amount of products
 
     public String getUserEmail() {
         return userEmail;

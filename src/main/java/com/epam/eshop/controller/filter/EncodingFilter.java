@@ -3,6 +3,7 @@ package com.epam.eshop.controller.filter;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by artch on 23.09.2020.
@@ -15,8 +16,10 @@ public class EncodingFilter implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
+        String encoding = StandardCharsets.UTF_8.name();
+
+        req.setCharacterEncoding(encoding);
+        resp.setCharacterEncoding(encoding);
 
         chain.doFilter(req, resp);
     }

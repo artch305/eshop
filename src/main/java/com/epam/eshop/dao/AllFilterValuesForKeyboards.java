@@ -20,16 +20,16 @@ public class AllFilterValuesForKeyboards {
 
     private static Map<String, List<String>> allValuesForFilters;
 
-    public static final String SQL_GET_ALL_LIGHT_COLORS = "select distinct light_color from keyboard_products";
-    public static final String SQL_GET_ALL_PRODUCERS = "select distinct producer from products where category = '" + Category.KEYBOARDS.getDatabaseValue() + "'";
-    public static final String SQL_GET_ALL_CONNECTION_TYPES = "select distinct connection_type from keyboard_products";
+    private static final String SQL_GET_ALL_LIGHT_COLORS = "select distinct light_color from keyboard_products";
+    private static final String SQL_GET_ALL_PRODUCERS = "select distinct producer from products where category = '" + Category.KEYBOARDS.getDatabaseValue() + "'"; // TODO: 14.10.2020 duplication with monitors selection. category is not passed as parameter of prepared statement 
+    private static final String SQL_GET_ALL_CONNECTION_TYPES = "select distinct connection_type from keyboard_products";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AllFilterValuesForKeyboards.class);
 
     private static List<String> getAllLightColors() { // TODO: 29.09.2020 synchronization
         List<String> colors = new ArrayList<>();
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection(); // TODO: 14.10.2020 connection manager instance to constructor
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ALL_LIGHT_COLORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -67,7 +67,7 @@ public class AllFilterValuesForKeyboards {
     private static List<String> getAllConnectionTypes() { // TODO: 29.09.2020 synchronization
         List<String> connectionsTypes = new ArrayList<>();
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection();
+        try (Connection connection = ConnectionManager.getInstance().getConnection(); // TODO: 14.10.2020 duplication of the whole methods, except sql query and column name
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ALL_CONNECTION_TYPES)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -83,7 +83,7 @@ public class AllFilterValuesForKeyboards {
         return connectionsTypes;
     }
 
-    public static Map<String, List<String>> getAllValuesForFilters() {
+    public static Map<String, List<String>> getAllValuesForFilters() { // TODO: 14.10.2020 bad practice to pass non-related objects as one map. if you want to transfer all these objects at time, wrap in object
         if (allValuesForFilters == null) {
             allValuesForFilters = new HashMap<>();
             allValuesForFilters.put("lightColors", getAllLightColors());

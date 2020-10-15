@@ -1,16 +1,28 @@
-CREATE TABLE IF NOT EXISTS `user_statuses`
+DROP TABLE IF EXISTS `orders_has_products` CASCADE;
+DROP TABLE IF EXISTS `orders` CASCADE;
+DROP TABLE IF EXISTS `users` CASCADE;
+DROP TABLE IF EXISTS `products` CASCADE;
+DROP TABLE IF EXISTS `monitor_products` CASCADE;
+DROP TABLE IF EXISTS `keyboard_products` CASCADE;
+DROP TABLE IF EXISTS `cart` CASCADE;
+DROP TABLE IF EXISTS `user_settings` CASCADE;
+DROP TABLE IF EXISTS `user_statuses` CASCADE;
+DROP TABLE IF EXISTS `user_roles` CASCADE;
+DROP TABLE IF EXISTS `order_statuses` CASCADE;
+
+CREATE TABLE `user_statuses`
 (
     `id`          INT         NOT NULL primary key,
     `user_status` VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `user_roles`
+CREATE TABLE `user_roles`
 (
     `id`        INT         NOT NULL primary key,
     `user_role` VARCHAR(45) NULL
 );
 
-CREATE TABLE IF NOT EXISTS `users`
+CREATE TABLE `users`
 (
     `id`                INT         NOT NULL AUTO_INCREMENT,
     `login`             VARCHAR(45) NOT NULL UNIQUE,
@@ -32,14 +44,14 @@ CREATE TABLE IF NOT EXISTS `users`
             ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `order_statuses`
+CREATE TABLE `order_statuses`
 (
     `id`           INT         NOT NULL,
     `order_status` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `orders`
+CREATE TABLE `orders`
 (
     `id`               INT       NOT NULL AUTO_INCREMENT,
     `user_id`          INT       NOT NULL,
@@ -60,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `orders`
             ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `products`
+CREATE TABLE `products`
 (
     `id`          INT           NOT NULL AUTO_INCREMENT,
     `category`    VARCHAR(45)   NOT NULL,
@@ -74,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `products`
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `orders_has_products`
+CREATE TABLE `orders_has_products`
 (
     `order_id`      INT    NOT NULL,
     `product_id`    INT    NOT NULL,
@@ -94,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `orders_has_products`
             ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `monitor_products`
+CREATE TABLE `monitor_products`
 (
     `id`         INT         NOT NULL AUTO_INCREMENT,
     `product_id` INT         NOT NULL,
@@ -109,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `monitor_products`
             ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `keyboard_products`
+CREATE TABLE `keyboard_products`
 (
     `id`              INT         NOT NULL AUTO_INCREMENT,
     `product_id`      INT         NOT NULL,
@@ -124,20 +136,20 @@ CREATE TABLE IF NOT EXISTS `keyboard_products`
             ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `user_settings`
+CREATE TABLE `user_settings`
 (
-    `id`       INT         NOT NULL AUTO_INCREMENT,
-    `users_id` INT         NOT NULL,
-    `language` VARCHAR(45) NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `fk_user_settings_users1`
-        FOREIGN KEY (`users_id`)
-            REFERENCES `users` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
+`id`       INT         NOT NULL AUTO_INCREMENT,
+`users_id` INT         NOT NULL,
+`language` VARCHAR(45) NULL,
+PRIMARY KEY (`id`),
+CONSTRAINT `fk_user_settings_users1`
+FOREIGN KEY (`users_id`)
+REFERENCES `users` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS `cart`
+CREATE TABLE `cart`
 (
     `user_id`    INT NOT NULL,
     `product_id` INT NOT NULL,

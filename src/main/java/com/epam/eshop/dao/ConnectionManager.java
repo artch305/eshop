@@ -17,7 +17,7 @@ public class ConnectionManager {
 
     private static ConnectionManager instance;
     private DataSource dataSource;
-    private static final String HOLDER = "";
+    private static final Object HOLDER = new Object();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
 

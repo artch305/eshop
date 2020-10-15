@@ -21,7 +21,7 @@ public abstract class BaseFilterService implements FilterService {
     static final String DELIMITER_BETWEEN_CONDITIONS = " and ";
     static final String DELIMITER_BETWEEN_WORDS = "', '";
     static final String ORDERING_FOR_DEFAULT = "producerA-Z";
-    StringBuilder newConditions = new StringBuilder();
+    protected StringBuilder newConditions = new StringBuilder();
 
     private static final Map<String, String> ORDERING_CONDITION_MAPPER = new HashMap<String, String>() {{
         put("minPrice", Columns.PRODUCTS_PRICE);
@@ -30,9 +30,9 @@ public abstract class BaseFilterService implements FilterService {
         put("producerZ-A", Columns.PRODUCTS_PRODUCER + " desc");
     }};
 
-    public void updateFilters(AbstractFilters filters, HttpServletRequest request) {
+    public void updateFilters(AbstractFilters filters, HttpServletRequest request) { // TODO: 14.10.2020 model should not know anything about controller implementation
         String newMinPriceStr = request.getParameter("minPrice");
-        double newMinPrice = newMinPriceStr.isEmpty() ? 0 : Double.parseDouble(newMinPriceStr);
+        double newMinPrice = newMinPriceStr.isEmpty() ? 0 : Double.parseDouble(newMinPriceStr); // TODO: 14.10.2020 duplication of retrieving and transforming param
 
         String newMaxPriceStr = request.getParameter("maxPrice");
         double newMaxPrice = newMaxPriceStr.isEmpty() ? 0 : Double.parseDouble(newMaxPriceStr);

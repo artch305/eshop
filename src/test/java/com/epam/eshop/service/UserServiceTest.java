@@ -27,7 +27,7 @@ public class UserServiceTest extends AbstractTest {
     private UserDAO userDao;
 
     @Before
-    public void init() throws Exception {
+    public void initUserServiceTest() throws Exception {
         connectionManager = mock(ConnectionManager.class);
         userDao = mock(UserDAO.class);
         userService = new UserService(connectionManager, userDao);

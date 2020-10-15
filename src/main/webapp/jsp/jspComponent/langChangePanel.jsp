@@ -51,7 +51,7 @@
 <script lang="javascript">
 
     function changeLang(lang) {
-        $.get('${pageContext.request.contextPath}/lang?lang=' + lang)
+        $.post('${pageContext.request.contextPath}/lang?lang=' + lang)
             .done(function (resp) {
                 window.location.reload();
             })

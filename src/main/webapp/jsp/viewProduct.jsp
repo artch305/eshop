@@ -37,11 +37,13 @@
         <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
             <div class="col-2">
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                    <fmt:message key="edit"/>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal${requestScope.currentProduct.id}">
+                    <img src="${pageContext.request.contextPath}/img/icons/icons8-edit-64.png"
+                         style="max-height: 30px">
                 </button>
 
-                <fctg:modalForChangeProduct product="${requestScope.currentProduct}">
+                <fctg:modalForChangeProduct product="${requestScope.currentProduct}"
+                        returnPath="${pageContext.request.contextPath}/products/${requestScope.currentProduct.category.databaseValue}/${requestScope.currentProduct.id}">
 
                 </fctg:modalForChangeProduct>
 
@@ -57,7 +59,10 @@
                               action="${pageContext.request.contextPath}/cart" method="post">
                             <input type="hidden" name="productId" value="${requestScope.currentProduct.id}">
                             <input type="hidden" name="actionCart" value="addProduct">
-                            <button type="submit" class="btn btn-success"><fmt:message key="addToCart"/></button>
+                            <button type="submit" class="btn btn-success">
+                                <img src="${pageContext.request.contextPath}/img/icons/icons8-cart-80.png"
+                                     style="max-height: 30px">
+                            </button>
                         </form>
                     </c:when>
                     <c:otherwise>
@@ -69,6 +74,12 @@
 
     </div>
 </div>
+
+    <c:if test="${requestScope.success != null}">
+        <div class="alert alert-success">
+            <strong><fmt:message key="success"/></strong><fmt:message key="successMessage"/>
+        </div>
+    </c:if>
 
 
 <div class="container p-3 my-3 border">
@@ -96,6 +107,8 @@
 
         $.post(addUrl, formElement.serializeArray())
             .done(function (resp) {
+                var newUserCart = $($.parseHTML(resp)).filter("#userCart").html();
+                $('#userCart').html(newUserCart);
             })
             .fail(function (err) {
                 console.log(err);

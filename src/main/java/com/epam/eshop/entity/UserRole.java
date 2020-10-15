@@ -4,11 +4,13 @@ package com.epam.eshop.entity;
  * Created by artch on 22.09.2020.
  */
 public class UserRole {
+    
+    public static final String ADMINISTRATOR = "administrator";
+    public static final String CUSTOMER = "customer";
+    
     private int id;
     private String role;
 
-    public static final String ADMINISTRATOR = "administrator";
-    public static final String CUSTOMER = "customer";
 
     public int getId() {
         return id;

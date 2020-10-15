@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<c:import url="jspComponent/head.jsp?currentPage=orders."/>
+<c:import url="jspComponent/head.jsp?activePage=orders"/>
 
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
@@ -23,44 +23,60 @@
 
 <fmt:bundle basename="messages" prefix="orders.">
 
-<div class="container-fluid" style="margin: 10px">
+    <div class="container-fluid" style="margin: 10px">
 
-            <table class="table table-striped">
-                <thead>
-                <tr class="table-primary">
-                    <th class="align-top"><fmt:message key="orderId"/></th>
-                    <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
-                        <th class="align-top"><fmt:message key="userEmail"/></th>
-                    </c:if>
-                    <th class="align-top"><fmt:message key="totalPrice"/></th>
-                    <th class="align-top"><fmt:message key="createDate"/></th>
-                    <th class="align-top"><fmt:message key="lastUpdateDate"/></th>
-                    <th class="align-top"><fmt:message key="status"/></th>
-                    <th class="align-top"><fmt:message key="viewDetails"/></th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="order" items="${sessionScope.orders}">
-                <tr>
-                    <td>${order.id}</td>
-                    <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
-                        <td>${order.userEmail}</td>
-                    </c:if>
-                    <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${order.totalPrice}"/>$</td>
-                    <td>${order.createDate}</td>
-                    <td>${order.lastUpdateDate}</td>
-                    <td>${order.orderStatus.status}</td>
-                    <td><a href="${pageContext.request.contextPath}/orders/${order.id}"
-                           class="btn btn-info" role="button"><fmt:message key="viewDetails"/></a></td>
-                </tr>
-                </c:forEach>
+        <table class="table table-striped">
+            <thead>
+            <tr class="table-primary">
+                <th class="align-top"><fmt:message key="orderId"/></th>
+                <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+                    <th class="align-top"><fmt:message key="userEmail"/></th>
+                </c:if>
+                <th class="align-top"><fmt:message key="totalPrice"/></th>
+                <th class="align-top"><fmt:message key="createDate"/></th>
+                <th class="align-top"><fmt:message key="lastUpdateDate"/></th>
+                <th class="align-top"><fmt:message key="status"/></th>
+                <th class="align-top"><fmt:message key="viewDetails"/></th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="order" items="${sessionScope.orders}">
+            <tr>
+                <td>${order.id}</td>
+                <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+                    <td>${order.userEmail}</td>
+                </c:if>
+                <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${order.totalPrice}"/>$</td>
+                <td>${order.createDate}</td>
+                <td>${order.lastUpdateDate}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${order.orderStatus.status == 'registered'}">
+                            <fmt:message key="registered"/>
+                        </c:when>
+                        <c:when test="${order.orderStatus.status == 'paid'}">
+                            <fmt:message key="paid"/>
+                        </c:when>
+                        <c:when test="${order.orderStatus.status == 'canceled'}">
+                            <fmt:message key="canceled"/>
+                        </c:when>
+                    </c:choose>
+                </td>
+                <td><a href="${pageContext.request.contextPath}/orders/${order.id}"
+                       class="btn btn-info" role="button">
+                    <img src="${pageContext.request.contextPath}/img/icons/icons8-view-64.png"
+                         style="max-height: 30px">
+                </a>
+                </td>
+            </tr>
+            </c:forEach>
 
-</div>
+    </div>
 
-<script lang="javascript">
+    <script lang="javascript">
 
 
-</script>
+    </script>
 </fmt:bundle>
 </body>
 </html>

@@ -26,7 +26,6 @@ public class UserDAO {
             "WHERE login = ?";
     private final static String SQL_SET_USER = "INSERT INTO users (login, email, password, user_status_id, user_role_id) " +
             "VALUES (?,?,?,?,?)";
-    private final static String SQL_SET_USER_STATUS_ID = "UPDATE users SET user_status_id = ? where id = ?";
     private final static String SQL_CHECK_LOGIN = "SELECT id FROM users where login = ?";
     private final static String SQL_CHECK_EMAIL = "SELECT id FROM users where email = ?";
     private final static String SQL_GET_USER_SETTINGS = "SELECT * FROM user_settings WHERE users_id = ?";
@@ -66,26 +65,34 @@ public class UserDAO {
         user.setEmail(resultSet.getString(Columns.USERS_EMAIL));
         user.setRegistrationDate(resultSet.getString(Columns.USERS_REGISTRATION_DATE));
 
-        UserStatus userStatus = new UserStatus();
-        userStatus.setId(resultSet.getInt(Columns.USERS_USER_STATUS_ID));
-        userStatus.setStatus(resultSet.getString(Columns.USER_STATUSES_USER_STATUS));
-        user.setUserStatus(userStatus);
+        fillUserStatus(user, resultSet);
 
+        fillUserRole(user, resultSet);
+        LOGGER.info("User - {} fields has been filled", user.getLogin());
+    }
+
+    private void fillUserRole(User user, ResultSet resultSet) throws SQLException {
         UserRole userRole = new UserRole();
         userRole.setId(resultSet.getInt(Columns.USERS_USER_ROLE_ID));
         userRole.setRole(resultSet.getString(Columns.USER_ROLES_USER_ROLE));
         user.setUserRole(userRole);
-        LOGGER.info("User - {} fields has been filled", user.getLogin());
+    }
+
+    private void fillUserStatus(User user, ResultSet resultSet) throws SQLException {
+        UserStatus userStatus = new UserStatus();
+        userStatus.setId(resultSet.getInt(Columns.USERS_USER_STATUS_ID));
+        userStatus.setStatus(resultSet.getString(Columns.USER_STATUSES_USER_STATUS));
+        user.setUserStatus(userStatus);
     }
 
     public User setUser(Connection connection, String login, String email, String password, int userRoleId) throws SQLException {
         User newUser;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER)) {
-            preparedStatement.setString(1, login);
+            preparedStatement.setString(1, login); // TODO: 14.10.2020 index var increment
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, password);
-            preparedStatement.setString(4, "1");
+            preparedStatement.setString(4, "1"); // TODO: 14.10.2020 what is it? enum like order status?
             preparedStatement.setString(5, String.valueOf(userRoleId));
             preparedStatement.execute();
 
@@ -135,16 +142,11 @@ public class UserDAO {
     }
 
     public void setUserLang(Connection connection, User user, String lang) throws SQLException {
-        UserSettings userSettings = null;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER_SETTINGS)) {
             preparedStatement.setString(1, String.valueOf(user.getId()));
             preparedStatement.setString(2, lang);
             preparedStatement.execute();
-
-            userSettings = new UserSettings();
-            userSettings.setUserId(user.getId());
-            userSettings.setLanguage(lang);
 
             LOGGER.info("Lang for user - |{}| has been set on |{}|", user.getLogin(), lang);
         }
@@ -195,7 +197,7 @@ public class UserDAO {
 
     public void updateUserData(Connection connection, int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, int newUserRoleId) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USERDATA)) {
-            preparedStatement.setString(1, newLogin);
+            preparedStatement.setString(1, newLogin); // TODO: 14.10.2020 index var increment
             preparedStatement.setString(2, newEmail);
             preparedStatement.setString(3, newPassword);
             preparedStatement.setString(4, String.valueOf(newUserStatusId));

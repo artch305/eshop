@@ -1,5 +1,8 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Order;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
@@ -24,18 +27,22 @@ public class OrderServlet extends HttpServlet {
     private static final String ACTION_ORDER_REMOVE_PRODUCT = "removeProduct";
     private static final String ACTION_ORDER_CHANGE_STATUS = "changeStatus";
 
+    private OrderService orderService;
+
+    public OrderServlet() {
+        orderService = new OrderService();
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("actionOrder");
-        String orderId = request.getParameter("orderId");
-        String productId = request.getParameter("productId");
-        OrderService orderService = new OrderService();
+        String action = request.getParameter(ParameterNames.ACTION_NAME_FOR_ORDER);
+        String orderId = request.getParameter(ParameterNames.ORDER_ID);
+        String productId = request.getParameter(ParameterNames.PRODUCT_ID);
 
-        boolean success = false;
+        boolean success;
 
-        switch (action) {
+        switch (action) { // TODO: rewritten with using Command pattern with success flag return
             case ACTION_ORDER_CHANGE_AMOUNT: {
-                String amount = request.getParameter("amount");
+                String amount = request.getParameter(ParameterNames.PRODUCT_AMOUNT);
                 success = orderService.changeProductAmountInOrder(orderId, productId, amount);
                 break;
             }
@@ -44,7 +51,7 @@ public class OrderServlet extends HttpServlet {
                 break;
             }
             case ACTION_ORDER_CHANGE_STATUS: {
-                String newStatusId = request.getParameter("newStatusId");
+                String newStatusId = request.getParameter(ParameterNames.NEW_STATUS_ID);
                 success = orderService.changeOrderStatus(orderId, newStatusId);
                 break;
             }
@@ -61,22 +68,27 @@ public class OrderServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("currentUser");
-        String orderId = request.getPathInfo();
-        orderId = orderId.replace("/", "");
-        OrderService orderService = new OrderService();
+        String orderId = Util.getIdFromURL(request.getPathInfo());
+
         Order order = orderService.getOrderById(orderId);
 
-        if ((order == null) || (order.getUserId() != user.getId() && !user.getUserRole().getRole().equals(UserRole.ADMINISTRATOR))) {
-            response.sendRedirect(request.getContextPath() + "/main");
+        User user = (User) request.getSession().getAttribute(AttributesNames.CURRENT_USER);
+        
+        if (!allowedAccessToOrder(order, user)) {
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
             return;
         }
 
         order.setUserEmail(user.getEmail());
-        Map<Product, Integer> productsInOrder = orderService.getProductsInOrder(order);
+        request.setAttribute(AttributesNames.CURRENT_ORDER, order);
 
-        request.setAttribute("productsInOrder", productsInOrder);
-        request.setAttribute("currentOrder", order);
-        request.getRequestDispatcher("/jsp/viewOrder.jsp").forward(request, response);
+        Map<Product, Integer> productsInOrder = orderService.getProductsInOrder(order);
+        request.setAttribute(AttributesNames.PRODUCTS_IN_ORDER, productsInOrder);
+        
+        request.getRequestDispatcher(URLConstants.VIEW_ORDERS_JSP).forward(request, response);
+    }
+
+    private boolean allowedAccessToOrder(Order order, User user) {
+        return (order != null) && (order.getUserId() == user.getId() || Util.checkUserRole(user,UserRole.ADMINISTRATOR));
     }
 }

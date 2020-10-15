@@ -21,11 +21,17 @@ import java.util.Map;
  */
 public class OrderService {
 
+    private OrderDAO orderDAO;
+    private CartDAO cartDAO;
+
+    public OrderService() {
+        orderDAO = new OrderDAO();
+        cartDAO = new CartDAO();
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     public boolean setOrder(User user, Cart currentUserCart) {
-        OrderDAO orderDAO = new OrderDAO();
-        CartDAO cartDAO = new CartDAO();
         Connection connection = null;
 
         try {
@@ -73,7 +79,6 @@ public class OrderService {
     }
 
     public List<Order> getAllOrders() {
-        OrderDAO orderDAO = new OrderDAO();
         List<Order> orders;
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
@@ -87,7 +92,6 @@ public class OrderService {
     }
 
     public List<Order> getOrdersByUser(User user) {
-        OrderDAO orderDAO = new OrderDAO();
         List<Order> orders;
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
@@ -101,7 +105,6 @@ public class OrderService {
     }
 
     public Order getOrderById(String orderId) {
-        OrderDAO orderDAO = new OrderDAO();
         Order order;
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
@@ -115,7 +118,6 @@ public class OrderService {
     }
 
     public Map<Product, Integer> getProductsInOrder(Order order) {
-        OrderDAO orderDAO = new OrderDAO();
         Map<Product, Integer> productsInOrder;
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
@@ -138,8 +140,6 @@ public class OrderService {
             return false;
         }
 
-        OrderDAO orderDAO = new OrderDAO();
-
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             orderDAO.changeProductAmountInOrder(connection, orderId, productId, amount);
             return true;
@@ -152,8 +152,6 @@ public class OrderService {
     public boolean removeProductFromOrder(String orderIdStr, String productIdStr) {
         int orderId = Integer.parseInt(orderIdStr);
         int productId = Integer.parseInt(productIdStr);
-
-        OrderDAO orderDAO = new OrderDAO();
 
         try (Connection connection = ConnectionManager.getInstance().getConnection()) {
             orderDAO.removeProductInOrder(connection, orderId, productId);

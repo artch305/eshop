@@ -1,5 +1,7 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Order;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
@@ -20,25 +22,26 @@ import java.util.List;
 @WebServlet("/orders")
 public class OrdersPageServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private OrderService orderService;
 
+    public OrdersPageServlet() {
+        orderService = new OrderService();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("currentUser");
-
-        OrderService orderService = new OrderService();
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(AttributesNames.CURRENT_USER);
+
         List<Order> orders = null;
 
-        if (UserRole.ADMINISTRATOR.equals(user.getUserRole().getRole())) {
+        if (Util.checkUserRole(user,UserRole.ADMINISTRATOR)) {
             orders = orderService.getAllOrders();
-        } else if (UserRole.CUSTOMER.equals(user.getUserRole().getRole())) {
+        } else if (Util.checkUserRole(user, UserRole.CUSTOMER)) {
             orders = orderService.getOrdersByUser(user);
         }
 
-        session.setAttribute("orders", orders);
-        request.getRequestDispatcher("/jsp/orders.jsp").forward(request, response);
-
+        session.setAttribute(AttributesNames.ORDERS, orders);
+        
+        request.getRequestDispatcher(URLConstants.ORDERS_JSP).forward(request, response);
     }
 }

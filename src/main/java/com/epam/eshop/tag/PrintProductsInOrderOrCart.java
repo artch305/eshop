@@ -1,5 +1,7 @@
 package com.epam.eshop.tag;
 
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.entity.Order;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
@@ -24,7 +26,7 @@ public class PrintProductsInOrderOrCart extends TagSupport {
     private boolean inCart;
     private String contextPath;
     private Order order;
-    private String currentLocal;
+    private String currentLocale;
     private ResourceBundle rb;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintProductsInOrderOrCart.class);
@@ -41,14 +43,14 @@ public class PrintProductsInOrderOrCart extends TagSupport {
     public int doStartTag() throws JspException {
         Set<Map.Entry<Product, Integer>> productsEntry = productsWithAmount.entrySet();
         iterator = productsEntry.iterator();
-        user = (User) pageContext.getSession().getAttribute("currentUser");
+        user = Util.getUserFromSession(pageContext.getSession());
         contextPath = pageContext.getRequest().getServletContext().getContextPath();
-        order = (Order) pageContext.getRequest().getAttribute("currentOrder");
+        order = (Order) pageContext.getRequest().getAttribute(AttributesNames.CURRENT_ORDER);
         JspWriter out = pageContext.getOut();
 
-        if (pageContext.getSession().getAttribute("lang") == null) {
-            currentLocal = pageContext.getRequest().getLocale().getLanguage();
-            pageContext.getSession().setAttribute("lang", currentLocal);
+        if (pageContext.getSession().getAttribute(AttributesNames.LANGUAGE) == null) {
+            currentLocale = pageContext.getRequest().getLocale().getLanguage();
+            pageContext.getSession().setAttribute(AttributesNames.LANGUAGE, currentLocale);
         }
 
         rb = ResourceBundle.getBundle("messages", Locale.forLanguageTag((String) pageContext.getSession().getAttribute("lang")));

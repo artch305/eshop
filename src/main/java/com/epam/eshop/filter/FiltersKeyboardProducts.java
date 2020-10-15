@@ -12,7 +12,7 @@ public class FiltersKeyboardProducts extends AbstractFilters {
     private List<String> connectionTypes;
     private List<Boolean> mechanical;
     private List<String> lightColors;
-    private String filtersCategory = Category.KEYBOARDS.getDatabaseValue();
+    private final String filtersCategory = Category.KEYBOARDS.getDatabaseValue();
 
     @Override
     public String getFiltersCategory() {

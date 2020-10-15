@@ -1,5 +1,8 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserSettings;
@@ -20,49 +23,45 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    private UserService userService;
+    private CartService cartService;
+
+    public LoginServlet() {
+        userService = new UserService();
+        cartService = new CartService();
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        HttpSession session = request.getSession();
-        String currentPage = request.getParameter("currentPageForReturn");
+        String currentPage = Util.getReturnPath(request);
 
-        if (currentPage == null || currentPage.trim().isEmpty()) {
-            currentPage = "main";
-        }
+        String login = request.getParameter(ParameterNames.LOGIN);
+        String password = request.getParameter(ParameterNames.PASSWORD);
 
-        UserService userService = new UserService();
         User user = userService.getUser(login, password);
 
+        HttpSession session = request.getSession();
+
         if (user == null) {
-            session.setAttribute("errorLogin", "incorrect login or password");
+            session.setAttribute(AttributesNames.ERROR_LOGIN, true);
             response.sendRedirect(currentPage);
             return;
         }
 
         if (UserStatus.BANNED.equals(user.getUserStatus().getStatus())) {
-            response.sendRedirect(request.getContextPath() + "/jsp/errorBanned.jsp");
+            response.sendRedirect(request.getContextPath() + URLConstants.ERROR_BANNED_JSP);
             return;
         }
 
-        CartService cartService = new CartService();
+        session.removeAttribute(AttributesNames.ERROR_LOGIN);
+        session.setAttribute(AttributesNames.CURRENT_USER, user);
+
         UserSettings userSettings = userService.getUserSettings(user);
+        session.setAttribute(AttributesNames.LANGUAGE, userSettings.getLanguage());
+
         Cart currentUserCart = new Cart();
         cartService.fillCurrentUserCart(user, currentUserCart);
+        session.setAttribute(AttributesNames.CURRENT_USER_CART, currentUserCart);
 
-        session.removeAttribute("errorLogin");
-        session.setAttribute("currentUserCart", currentUserCart);
-        session.setAttribute("lang", userSettings.getLanguage());
-        session.setAttribute("currentUser", user);
-        response.sendRedirect(currentPage);
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String currentPage = request.getParameter("currentPageForReturn");
-
-        if (currentPage == null || currentPage.trim().isEmpty()) { // TODO: 10.10.2020 use trim() before isEmpty()
-            currentPage = request.getContextPath() + "/main";
-        }
-        request.getSession().invalidate();
         response.sendRedirect(currentPage);
     }
 }

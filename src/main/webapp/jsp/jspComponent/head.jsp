@@ -10,7 +10,10 @@
     <div class="row">
 
         <div class="col-7" style="margin: 10px 10px">
-            <img src="${pageContext.request.contextPath}/img/banner.jpg" class="img-thumbnail" alt="Cinque Terre" width="1000" height="280" style="max-height: 280px">
+            <a href="${pageContext.request.contextPath}/main"
+               class="btn btn-info" role="button" style="margin: 5px 5px">
+                <img src="${pageContext.request.contextPath}/img/banner.jpg" class="img-thumbnail" alt="Cinque Terre" width="1000" height="280" style="max-height: 280px">
+            </a>
         </div>
 
         <div class="col-3" style="margin: 10px 10px">
@@ -27,12 +30,12 @@
 </div>
 <br/>
 <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
-    <c:import url="jspComponent/adminNavPanel.jsp?currentPage=${param.currentPage}&currentPageForReturn=${param.currentPageForReturn}"/>
+    <c:import url="jspComponent/adminNavPanel.jsp?activePage=${param.activePage}&currentPageForReturn=${param.currentPageForReturn}"/>
 
 </c:if>
 
 <c:if test="${sessionScope.currentUser.userRole.role == 'customer'}">
-    <c:import url="jspComponent/userNavPanel.jsp?currentPage=${param.currentPage}&currentPageForReturn=${param.currentPageForReturn}"/>
+    <c:import url="jspComponent/userNavPanel.jsp?activePage=${param.activePage}&currentPageForReturn=${param.currentPageForReturn}"/>
 </c:if>
 
 <c:if test="${sessionScope.currentUser == null}">

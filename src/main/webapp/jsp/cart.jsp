@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<c:import url="jspComponent/head.jsp?currentPage=cart"/>
+<c:import url="jspComponent/head.jsp?activePage=cart"/>
 
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
@@ -26,15 +26,12 @@
 <div id="cartBody" class="container">
     <c:choose>
 
-        <c:when test="${requestScope.success}">
+        <c:when test="${requestScope.success != null}">
             <div class="alert alert-success">
-                <strong>Success!</strong> Thank you for order!
+                <strong><fmt:message key="success"/></strong> <fmt:message key="successMessage"/>
             </div>
         </c:when>
-        <c:when test="${requestScope.success}">
-            <img src="${pageContext.request.contextPath}/img/error.png" class="mx-auto d-block"
-                 style="max-width: 200px">
-        </c:when>
+
     </c:choose>
 
 
@@ -108,7 +105,7 @@
         return false;
     }
 
-    (function () {
+/*    (function () {
         $('#form_confirm').on('submit', function (e) {
             e.preventDefault();
 
@@ -132,7 +129,7 @@
                 alert('Failed to confirm order');
             });
 
-    }
+    }*/
 
 </script>
 </body>

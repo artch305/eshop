@@ -2,6 +2,7 @@ package com.epam.eshop.dao;
 
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserSettings;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,11 +14,16 @@ import static org.junit.Assert.*;
  */
 public class UserDAOTest extends AbstractTest {
 
+    private UserDAO userDAO;
+
+    @Before
+    public void initDao() throws Exception {
+        userDAO = new UserDAO();
+    }
 
     @Test
     public void testGetUserByLoginAndPassword() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         String userLogin = "artch";
         String userRightPass = "artchpass";
         String userWrongPass = "artch1";
@@ -54,7 +60,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testExistLogin() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         String userLogin1 = "artch";
         String userLogin2 = "qwe";
 
@@ -70,7 +75,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testExistEmail() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         String userEmail1 = "artch@gmail.com";
         String userEmail2 = "qwe@gmail.com";
         // FUNCTIONALITY
@@ -84,7 +88,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testGetUserSettings() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(connection, 1);
         // FUNCTIONALITY
         UserSettings userSettings = userDAO.getUserSettings(connection, user);
@@ -95,7 +98,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testSetUserLang() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         User user = userDAO.setUser(connection, "asd", "asd@gmail.com", "asdpass", 2);
         // FUNCTIONALITY
         userDAO.setUserLang(connection, user, "en");
@@ -107,7 +109,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testUpdateUserLang() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(connection, 2);
         // FUNCTIONALITY
         userDAO.updateUserLang(connection, user, "en");
@@ -119,16 +120,17 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testGetAllUsers() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         List<User> users;
         User userArtch = userDAO.getUserById(connection, 1);
         User userFerian = userDAO.getUserById(connection, 2);
         User userMefist = userDAO.getUserById(connection, 3);
+
         // FUNCTIONALITY
         users = userDAO.getAllUsers(connection);
         boolean contains1 = users.contains(userArtch);
         boolean contains2 = users.contains(userFerian);
         boolean contains3 = users.contains(userMefist);
+
         // TESTS
         assertTrue(contains1);
         assertTrue(contains2);
@@ -137,8 +139,6 @@ public class UserDAOTest extends AbstractTest {
 
     @Test
     public void testGetUserById() throws Exception {
-        // PREDICATE
-        UserDAO userDAO = new UserDAO();
         // FUNCTIONALITY
         User userArtch = userDAO.getUserById(connection, 1);
         // TESTS
@@ -150,7 +150,6 @@ public class UserDAOTest extends AbstractTest {
     @Test
     public void testUpdateUserData() throws Exception {
         // PREDICATE
-        UserDAO userDAO = new UserDAO();
         String login = "rty";
         String email = "rty@gamil.com";
         String pass = "rtypass";

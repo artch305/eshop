@@ -17,9 +17,6 @@ public abstract class AbstractFilters {
     private String conditionForOrdering = "";
     private String orderingName;
 
-    private String delimiterBetweenConditions = " and ";
-    private String delimiterBetweenWords = "', '";
-
     public List<Boolean> getActive() {
         return active;
     }
@@ -76,22 +73,6 @@ public abstract class AbstractFilters {
 
     public void setOrderingName(String orderingName) {
         this.orderingName = orderingName;
-    }
-
-    public String getDelimiterBetweenConditions() {
-        return delimiterBetweenConditions;
-    }
-
-    public void setDelimiterBetweenConditions(String delimiterBetweenConditions) {
-        this.delimiterBetweenConditions = delimiterBetweenConditions;
-    }
-
-    public String getDelimiterBetweenWords() {
-        return delimiterBetweenWords;
-    }
-
-    public void setDelimiterBetweenWords(String delimiterBetweenWords) {
-        this.delimiterBetweenWords = delimiterBetweenWords;
     }
 
 }

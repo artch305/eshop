@@ -1,5 +1,8 @@
 package com.epam.eshop.controller;
 
+import com.epam.eshop.controller.constants.AttributesNames;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.filter.AbstractFilters;
@@ -29,13 +32,14 @@ public class ProductsPageServlet extends HttpServlet {
     private static final String ACTION_CHANGE_AMOUNT_PRODUCTS_ON_PAGE = "changeProductsOnPage";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String currentAction = request.getParameter("action");
         HttpSession session = request.getSession();
 
-        AbstractFilters currentUserFilters = (AbstractFilters) session.getAttribute("filters");
-        String category = currentUserFilters.getFiltersCategory();
+        AbstractFilters currentUserFilters = (AbstractFilters) session.getAttribute(AttributesNames.FILTERS);
 
+        String category = currentUserFilters.getFiltersCategory();
         FilterService filterService = FilterServiceFactory.getFilterService(category);
+
+        String currentAction = request.getParameter(ParameterNames.ACTION_FILTERS);
 
         switch (currentAction) {
             case ACTION_RESET_FILTERS: {
@@ -47,17 +51,17 @@ public class ProductsPageServlet extends HttpServlet {
                 break;
             }
             case ACTION_CHANGE_ORDERING: {
-                String orderingBy = request.getParameter("orderingBy");
+                String orderingBy = request.getParameter(ParameterNames.ORDERING_BY);
                 filterService.applyOrdering(currentUserFilters, orderingBy);
                 break;
             }
             case ACTION_CHANGE_AMOUNT_PRODUCTS_ON_PAGE: {
-                String amountProductsOnPage = request.getParameter("productsOnPage");
-                session.setAttribute("productsOnPage", amountProductsOnPage);
+                String amountProductsOnPage = request.getParameter(ParameterNames.PRODUCTS_ON_PAGE);
+                session.setAttribute(ParameterNames.PRODUCTS_ON_PAGE, amountProductsOnPage);
                 break;
             }
             default: {
-                throw new UnsupportedOperationException("Not implemented in OrderServlet");
+                throw new UnsupportedOperationException("Not implemented in ProductsPageServlet");
             }
         }
 
@@ -65,35 +69,44 @@ public class ProductsPageServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String category = request.getParameter("category");
-        String page = request.getParameter("page");
-        ProductService productService = new ProductService(category);
         HttpSession session = request.getSession();
-        User user = (User) request.getSession().getAttribute("currentUser");
 
-        AbstractFilters currentUserFilters = (AbstractFilters) session.getAttribute("filters");
+        AbstractFilters currentUserFilters = (AbstractFilters) session.getAttribute(AttributesNames.FILTERS);
+
+        String category = request.getParameter(ParameterNames.CATEGORY);
+        User user = (User) request.getSession().getAttribute(AttributesNames.CURRENT_USER);
         currentUserFilters = checkAndGetCorrectFilters(user, category, session, currentUserFilters);
 
-        List<Product> products = productService.getProducts(currentUserFilters, page, (String) session.getAttribute("productsOnPage"));
+        ProductService productService = new ProductService(category);
+        String page = request.getParameter(ParameterNames.PAGE);
+        String productsOnPage = (String) session.getAttribute(AttributesNames.PRODUCTS_ON_PAGE);
+        List<Product> products = productService.getProducts(currentUserFilters, page, productsOnPage);
+        session.setAttribute(AttributesNames.PRODUCTS, products);
 
-        session.setAttribute("maxItems", productService.getMaxItems(currentUserFilters));
-        session.setAttribute("products", products);
-        request.getRequestDispatcher("/jsp/products.jsp").forward(request, response);
+        session.setAttribute(AttributesNames.MAX_ITEMS, productService.getMaxItems(currentUserFilters));
+        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+
+        request.getRequestDispatcher(URLConstants.PRODUCTS_JSP).forward(request, response);
     }
 
     private AbstractFilters checkAndGetCorrectFilters(User user, String category, HttpSession session, AbstractFilters currentUserFilters) {
-        if (currentUserFilters != null && !currentUserFilters.getFiltersCategory().equals(category)) {
+        if (!isCorrectFilters(category, currentUserFilters)) {
             currentUserFilters = null;
         }
 
         if (currentUserFilters == null) {
             FilterService filterService = FilterServiceFactory.getFilterService(category);
             currentUserFilters = filterService.getFiltersForUser(user);
+            session.setAttribute(AttributesNames.FILTERS, currentUserFilters);
+
             Map<String, List<String>> allValuesForFilters = filterService.getAllValuesForFilters(currentUserFilters);
-            session.setAttribute("allValuesForFilters", allValuesForFilters);
-            session.setAttribute("filters", currentUserFilters);
+            session.setAttribute(AttributesNames.ALL_VALUES_FOR_FILTERS, allValuesForFilters);
         }
 
         return currentUserFilters;
+    }
+
+    private boolean isCorrectFilters(String category, AbstractFilters currentUserFilters) {
+        return currentUserFilters != null && currentUserFilters.getFiltersCategory().equals(category);
     }
 }

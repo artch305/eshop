@@ -1,10 +1,13 @@
 package com.epam.eshop.dao;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -21,8 +24,8 @@ public class AbstractTest {
     protected static Connection connection;
 
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         Class.forName(JDBC_DRIVER);
 
         connection = DriverManager.getConnection(URL_CONNECTION);
@@ -34,7 +37,6 @@ public class AbstractTest {
         try (Statement statement = connection.createStatement()) {
             statement.execute(getSQL("/sql/eshop_data.sql"));
         }
-
     }
 
     private static String getSQL(String fileName) {
@@ -51,14 +53,10 @@ public class AbstractTest {
         return createTableQuery.toString();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         if (!connection.isClosed()){
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("drop table users, user_statuses, user_roles, " +
-                        "order_statuses, orders, products, orders_has_products, monitor_products, " +
-                        "keyboard_products, user_settings, cart;");
-            }
+            connection.close();
         }
     }
 }

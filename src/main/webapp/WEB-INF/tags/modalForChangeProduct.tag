@@ -4,6 +4,7 @@
 <%@ tag import="com.sun.xml.internal.ws.api.ha.StickyFeature" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ attribute name="product" required="true" type="com.epam.eshop.entity.Product" rtexprvalue="true" %>
+<%@ attribute name="returnPath" required="true" type="java.lang.String" rtexprvalue="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="categoryParamName" value="category"/>
@@ -14,7 +15,7 @@
 
 <fmt:bundle basename="messages" prefix="">
 
-    <div class="modal fade" id="myModal">
+    <div class="modal fade" id="myModal${product.id}">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -33,9 +34,7 @@
                             <input type="hidden" value="${product.category.databaseValue}" name="category"/>
                             <input type="hidden" value="${product.id}" name="productId"/>
                             <input type="hidden" value="${product.imgURL}" name="imgURL"/>
-                            <input type="hidden"
-                                   value="${pageContext.request.contextPath}/products/${product.category.databaseValue}/${product.id}"
-                                   name="returnPath"/>
+                            <input type="hidden" value="${returnPath}" name="currentPageForReturn"/>
 
                             <div class="row" style="margin: 10px 10px">
                                 <div class="col-5">

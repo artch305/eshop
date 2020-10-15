@@ -35,12 +35,12 @@
 
             <div class="modal-body">
                 <div class="container p-3 my-3 border">
-                    <form action="${pageContext.request.contextPath}/products/<%=category%>>/0"
+                    <form action="${pageContext.request.contextPath}/products/<%=category%>/0"
                           enctype="multipart/form-data" method="post">
 
                         <input type="hidden" value="<%=category%>" name="category"/>
                         <input type="hidden" value="addProduct" name="productAction"/>
-                        <input type="hidden" value="${pageContext.request.contextPath}/products/<%=category%>/" name="returnPath"/>
+                        <input type="hidden" value="${pageContext.request.contextPath}/products/<%=category%>/" name="currentPageForReturn"/>
 
                         <div class="row" style="margin: 10px 10px">
                             <div class="col-5">

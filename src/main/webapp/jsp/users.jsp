@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<c:import url="jspComponent/head.jsp?currentPage=users"/>
+<c:import url="jspComponent/head.jsp?activePage=users"/>
 
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
@@ -50,11 +50,30 @@
             <td>${user.login}</td>
             <td>${user.email}</td>
             <td>${user.registrationDate}</td>
-            <td>${user.userRole.role}</td>
-            <td>${user.userStatus.status}</td>
+            <td>
+            <c:choose>
+                <c:when test="${user.userRole.role == 'administrator'}">
+                    <fmt:message key="administrator"/>
+                </c:when>
+                <c:when test="${user.userRole.role == 'customer'}">
+                    <fmt:message key="customer"/>
+                </c:when>
+            </c:choose>
+            </td>
+            <td>
+                <c:choose>
+                    <c:when test="${user.userStatus.status == 'active'}">
+                        <fmt:message key="active"/>
+                    </c:when>
+                    <c:when test="${user.userStatus.status == 'banned'}">
+                        <fmt:message key="banned"/>
+                    </c:when>
+                </c:choose>
+            </td>
             <td><!-- Button to Open the Modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal${user.id}">
-                    Edit
+                    <img src="${pageContext.request.contextPath}/img/icons/icons8-edit-64.png"
+                         style="max-height: 30px">
                 </button>
 
                 <!-- The Modal -->

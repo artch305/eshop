@@ -24,6 +24,11 @@ public class CartDAO {
     private static final String SQL_REMOVE_PRODUCTS_BY_USER_ID = "delete from cart where user_id = ?";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CartDAO.class);
+    private BaseProductDAO productDAO;
+
+    public CartDAO() {
+        productDAO = new BaseProductDAO();
+    }
 
     public void addProduct(Connection connection, int userId, int productId) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_PRODUCT_TO_CART)) {
@@ -42,7 +47,6 @@ public class CartDAO {
 
             while (resultSet.next()) {
                 Product product = new Product();
-                BaseProductDAO productDAO = new BaseProductDAO();
                 productDAO.fillBaseProduct(resultSet, product);
                 currentUserCart.getProductsInCart().put(product, resultSet.getInt(Columns.CART_AMOUNT));
             }

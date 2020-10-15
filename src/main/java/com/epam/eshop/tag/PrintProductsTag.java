@@ -1,5 +1,6 @@
 package com.epam.eshop.tag;
 
+import com.epam.eshop.controller.Util;
 import com.epam.eshop.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class PrintProductsTag extends TagSupport {
     public int doStartTag() throws JspException {
         this.amountProducts = products.size();
         this.indexCurrentProduct = 0;
-        this.currentUser = (User) pageContext.getSession().getAttribute("currentUser");
+        this.currentUser = Util.getUserFromSession(pageContext.getSession());
         contextPath = pageContext.getRequest().getServletContext().getContextPath();
 
         return EVAL_BODY_INCLUDE;
@@ -80,9 +81,7 @@ public class PrintProductsTag extends TagSupport {
                     out.write("<button  type=\"submit\"  class=\"btn btn-success\" style=\"margin: 5px 5px\">Add to cart</button>");
                     out.write("</form>");
                     out.write("</div>");
-                }
-
-                if (currentUser != null && currentUser.getUserRole().getRole().equals(UserRole.ADMINISTRATOR)) {
+                } else if (currentUser != null && currentUser.getUserRole().getRole().equals(UserRole.ADMINISTRATOR)) {
                     out.write("<div class=\"row\">");
 
                     out.write("<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" " +
