@@ -19,7 +19,7 @@ public interface FilterService {
 
     void applyOrdering(AbstractFilters filters, String orderingBy);
 
-    AllValuesForFilters getAllValuesForFilters(AbstractFilters filters);
+    AllValuesForFilters getAllValuesForFilters();
 
 
 }

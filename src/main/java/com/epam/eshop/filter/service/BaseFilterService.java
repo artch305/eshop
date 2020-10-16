@@ -106,7 +106,7 @@ public abstract class BaseFilterService implements FilterService {
     }
 
     @Override
-    public AllValuesForFilters getAllValuesForFilters(AbstractFilters filters) {
+    public AllValuesForFilters getAllValuesForFilters() {
         return new AllValuesForFilters();
     }
 }

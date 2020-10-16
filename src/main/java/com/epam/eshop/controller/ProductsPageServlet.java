@@ -103,7 +103,7 @@ public class ProductsPageServlet extends HttpServlet {
             currentUserFilters = filterService.getFiltersForUser(user);
             session.setAttribute(AttributesNames.FILTERS, currentUserFilters);
 
-            AllValuesForFilters allValuesForFilters = filterService.getAllValuesForFilters(currentUserFilters);
+            AllValuesForFilters allValuesForFilters = filterService.getAllValuesForFilters();
             session.setAttribute(AttributesNames.ALL_VALUES_FOR_FILTERS, allValuesForFilters);
         }
 

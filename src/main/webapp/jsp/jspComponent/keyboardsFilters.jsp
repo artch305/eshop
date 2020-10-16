@@ -1,3 +1,4 @@
+<%@ page import="com.epam.eshop.entity.UserRole" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,6 +13,8 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 
+<c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
+
 <fmt:bundle basename="messages" prefix="product.">
 <div class="container p-3 my-3 border">
     <form action="${pageContext.request.contextPath}/products" method="post">
@@ -20,7 +23,7 @@
             <h3><span class="badge badge-pill badge-success"><fmt:message key="filters.title"/></span></h3>
         </div>
 
-        <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+        <c:if test="${sessionScope.currentUser.userRole == administrator}">
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
             <div class="form-check">
                 <label class="form-check-label">
@@ -98,7 +101,6 @@
         </div>
 
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
-            <c:set var="lightColorsList" value="lightColors"/>
             <h6><fmt:message key="filters.keyboard.lightColor"/></h6>
             <c:forEach var="lightColor" items="${sessionScope.allValuesForFilters.lightColors}">
                 <div class="form-check">
