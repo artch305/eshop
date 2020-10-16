@@ -1,5 +1,7 @@
 package com.epam.eshop.controller.filter;
 
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.User;
 
 import javax.servlet.*;
@@ -9,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * This class checks access rights for getting resources. urlPatterns contains URLs where forbidden
+ * access for uloggined user
+ *
  * Created by artch on 23.09.2020.
  */
 @WebFilter(urlPatterns = {"/cart", "/orders", "/orders/*", "/users"})
@@ -22,10 +27,10 @@ public class AccessFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        User user = (User) request.getSession(true).getAttribute("currentUser"); // TODO: 14.10.2020 to attributes and params constants
+        User user = Util.getUserFromSession(((HttpServletRequest) req).getSession());
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/main"); // TODO: 14.10.2020 to url constants
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
         } else {
             chain.doFilter(req, resp);
         }

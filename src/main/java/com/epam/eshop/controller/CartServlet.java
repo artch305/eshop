@@ -17,6 +17,9 @@ import java.io.IOException;
 
 
 /**
+ * This servlet processes all requests for changing or getting {@link com.epam.eshop.entity.Cart}
+ * Here using pattern Command for changing Cart in post requests with param "actionCart".
+ *
  * Created by artch on 05.10.2020.
  */
 @WebServlet("/cart")

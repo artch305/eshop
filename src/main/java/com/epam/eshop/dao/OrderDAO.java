@@ -17,9 +17,7 @@ import java.util.Map;
  */
 public class OrderDAO {
 
-    private static final int ORDER_STATUS_REGISTERED = 1;
-    private static final int ORDER_STATUS_PAID = 2;
-    private static final int ORDER_STATUS_CANCELED = 3;
+    private static final int ORDER_STATUS_DEFAULT = 1;
 
     private static final String SQL_SET_ORDER = "insert into orders (user_id, order_status_id) values (?,?)";
     private static final String SQL_SET_PRODUCT_TO_ORDER = "insert into orders_has_products " +
@@ -44,7 +42,7 @@ public class OrderDAO {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, String.valueOf(userId));
-            preparedStatement.setString(2, String.valueOf(ORDER_STATUS_REGISTERED));
+            preparedStatement.setString(2, String.valueOf(ORDER_STATUS_DEFAULT));
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
 

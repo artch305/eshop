@@ -147,7 +147,7 @@ public class UserServiceTest extends AbstractTest {
         String newUserLogin = "qwe";
         String newUserEmail = "qwe@gmail.com";
         String newUserPassword = "qwepass";
-        int newUserStatusId = 2;
+        String newUserStatus = UserStatus.ACTIVE.getStatus();
         String newUserRole = UserRole.CUSTOMER.getRole();
         String newExistLogin = "mefist";
         String newExistEmail = "mefist@gmail.com";
@@ -158,11 +158,7 @@ public class UserServiceTest extends AbstractTest {
         user.setEmail("artch@gmail.com");
         user.setPassword("artchpass");
         user.setUserRole(UserRole.ADMINISTRATOR);
-
-        UserStatus userStatus = new UserStatus();
-        userStatus.setId(1);
-        userStatus.setStatus(UserStatus.ACTIVE);
-        user.setUserStatus(userStatus);
+        user.setUserStatus(UserStatus.ACTIVE);
 
         when(connectionManager.getConnection()).thenReturn(connection);
         when(userDao.existLogin(connection, newUserLogin)).thenReturn(false);
@@ -171,10 +167,10 @@ public class UserServiceTest extends AbstractTest {
         when(userDao.existEmail(connection, newExistEmail)).thenReturn(true);
         when(userDao.getUserById(connection, userId)).thenReturn(user);
         // FUNCTIONALITY
-        String message1 = userService.changeUserData(userId, newUserLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRole);
-        String message2 = userService.changeUserData(userId, "", "", newUserPassword, newUserStatusId, newUserRole);
-        String message3 = userService.changeUserData(userId, newExistLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRole);
-        String message4 = userService.changeUserData(userId, newUserLogin, newExistEmail, newUserPassword, newUserStatusId, newUserRole);
+        String message1 = userService.changeUserData(userId, newUserLogin, newUserEmail, newUserPassword, newUserStatus, newUserRole);
+        String message2 = userService.changeUserData(userId, "", "", newUserPassword, newUserStatus, newUserRole);
+        String message3 = userService.changeUserData(userId, newExistLogin, newUserEmail, newUserPassword, newUserStatus, newUserRole);
+        String message4 = userService.changeUserData(userId, newUserLogin, newExistEmail, newUserPassword, newUserStatus, newUserRole);
         // TESTS
         assertNull(message1);
         assertEquals("emptyField", message2);

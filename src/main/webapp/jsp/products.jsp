@@ -27,7 +27,7 @@
     <c:set var="monitors" value="<%=Category.MONITORS%>"/>
     <c:set var="keyboards" value="<%=Category.KEYBOARDS%>"/>
 
-
+    <c:set var="categoryParamName" value="category"/>
     <c:import
             url="jspComponent/head.jsp?currentPageForReturn=${pageContext.request.contextPath}/products?category=${pageContext.request.getParameter(categoryParamName)}"/>
 

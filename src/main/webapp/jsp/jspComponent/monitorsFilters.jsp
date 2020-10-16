@@ -59,13 +59,12 @@
         </div>
 
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
-            <c:set var="producersList" value="producers"/>
             <h6><fmt:message key="producer"/></h6>
-            <c:forEach var="connectionType" items="${sessionScope.allValuesForFilters.get(producersList)}">
+            <c:forEach var="producerForMonitors" items="${sessionScope.allValuesForFilters.producersForMonitors}">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="producers" value="${connectionType}"
-                               <c:if test="${sessionScope.filters.producers.contains(connectionType)}">checked</c:if>>${connectionType}
+                        <input type="checkbox" class="form-check-input" name="producers" value="${producerForMonitors}"
+                               <c:if test="${sessionScope.filters.producers.contains(producerForMonitors)}">checked</c:if>>${producerForMonitors}
                     </label>
                 </div>
             </c:forEach>
@@ -84,7 +83,7 @@
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
             <c:set var="diadonalsList" value="diagonals"/>
             <h6><fmt:message key="filters.monitor.diagonal"/></h6>
-            <c:forEach var="diagonal" items="${sessionScope.allValuesForFilters.get(diadonalsList)}">
+            <c:forEach var="diagonal" items="${sessionScope.allValuesForFilters.diagonals}">
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="diagonals" value="${diagonal}"
@@ -97,7 +96,7 @@
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
             <c:set var="panelTypesList" value="panelTypes"/>
             <h6><fmt:message key="filters.monitor.panelType"/></h6>
-            <c:forEach var="panelType" items="${sessionScope.allValuesForFilters.get(panelTypesList)}">
+            <c:forEach var="panelType" items="${sessionScope.allValuesForFilters.panelTypes}">
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="panelTypes" value="${panelType}"

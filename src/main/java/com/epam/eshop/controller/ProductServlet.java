@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * This servlet provides adding and changing {@link Product} in post request
+ * depending on request param "productAction".
+ * Also provides details for {@link Product} in get request.
+ *
  * Created by artch on 01.10.2020.
  */
 @WebServlet("/products/*")

@@ -99,13 +99,14 @@ public class BaseProductDAO implements ProductDAO {
     }
 
     private void fillBaseValueToPreparedStatement(Map<String, String> values, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, values.get(Columns.PRODUCTS_CATEGORY));
-        preparedStatement.setString(2, values.get(Columns.PRODUCTS_PRODUCER));
-        preparedStatement.setString(3, values.get(Columns.PRODUCTS_NAME));
-        preparedStatement.setString(4, values.get(Columns.PRODUCTS_PRICE));
-        preparedStatement.setString(5, values.get(Columns.PRODUCTS_DESCRIPTION));
-        preparedStatement.setString(6, values.get(Columns.PRODUCTS_ACTIVE));
-        preparedStatement.setString(7, values.get(Columns.PRODUCTS_IMG_URL));
+        int numberColumn = 1;
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_CATEGORY));
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_PRODUCER));
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_NAME));
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_PRICE));
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_DESCRIPTION));
+        preparedStatement.setString(numberColumn++, values.get(Columns.PRODUCTS_ACTIVE));
+        preparedStatement.setString(numberColumn, values.get(Columns.PRODUCTS_IMG_URL));
         LOGGER.info("prepareStatement has been filled by |{}|", values.get(Columns.PRODUCTS_PRODUCER) + " " +
                 values.get(Columns.PRODUCTS_NAME));
     }

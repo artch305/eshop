@@ -58,22 +58,20 @@
         </div>
 
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
-            <c:set var="producersList" value="producers"/>
             <h6><fmt:message key="filters.producer"/></h6>
-            <c:forEach var="connectionType" items="${sessionScope.allValuesForFilters.get(producersList)}">
+            <c:forEach var="producerForKeyboards" items="${sessionScope.allValuesForFilters.producersForKeyboards}">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="producers" value="${connectionType}"
-                               <c:if test="${sessionScope.filters.producers.contains(connectionType)}">checked</c:if>>${connectionType}
+                        <input type="checkbox" class="form-check-input" name="producers" value="${producerForKeyboards}"
+                               <c:if test="${sessionScope.filters.producers.contains(producerForKeyboards)}">checked</c:if>>${producerForKeyboards}
                     </label>
                 </div>
             </c:forEach>
         </div>
 
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
-            <c:set var="connectionTypesList" value="connectionTypes"/>
             <h6><fmt:message key="filters.keyboard.connectionTypes"/></h6>
-            <c:forEach var="connectionType" items="${sessionScope.allValuesForFilters.get(connectionTypesList)}">
+            <c:forEach var="connectionType" items="${sessionScope.allValuesForFilters.connectionTypes}">
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="connectionTypes" value="${connectionType}"
@@ -102,7 +100,7 @@
         <div class="container p-3 my-3 border" style="margin: 10px 10px">
             <c:set var="lightColorsList" value="lightColors"/>
             <h6><fmt:message key="filters.keyboard.lightColor"/></h6>
-            <c:forEach var="lightColor" items="${sessionScope.allValuesForFilters.get(lightColorsList)}">
+            <c:forEach var="lightColor" items="${sessionScope.allValuesForFilters.lightColors}">
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="lightColors" value="${lightColor}"

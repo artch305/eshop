@@ -2,7 +2,6 @@ package com.epam.eshop.controller.cart;
 
 
 import com.epam.eshop.controller.Util;
-import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.dao.BaseProductDAO;
 import com.epam.eshop.dao.ConnectionManager;
@@ -20,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
+ * Implements interface {@link CartActionHandler} for adding {@link Product} to {@link Cart}
  * Created by artch on 05.10.2020.
  */
 class AddToCartAction implements CartActionHandler {
@@ -32,6 +32,17 @@ class AddToCartAction implements CartActionHandler {
         productDAO = new BaseProductDAO();
     }
 
+    /**
+     * main method for adding {@link Product} to {@link Cart}
+     *
+     * @param request {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet.Should contains params: "currentUser",
+     *                "productId", "currentUserCart";
+     * @return true when execution has been success
+     * @throws DBException throw this unchecked exception if something happened
+     *                     wrong in DAO level
+     */
     @Override
     public boolean execute(HttpServletRequest request) {
         User user = Util.getUserFromSession(request.getSession());

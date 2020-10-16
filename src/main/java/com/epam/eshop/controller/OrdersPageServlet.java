@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * This servlet provides list {@link Order} or get request
+ *
  * Created by artch on 06.10.2020.
  */
 @WebServlet("/orders")

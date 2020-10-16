@@ -13,10 +13,7 @@ public class Columns {
     public static final String USERS_REGISTRATION_DATE = "registration_date";
     public static final String USERS_LANG = "lang";
     public static final String USERS_ROLE = "role";
-
-
-    public static final String USER_STATUSES_ID = "id";
-    public static final String USER_STATUSES_USER_STATUS = "user_status";
+    public static final String USERS_STATUS = "status";
 
     public static final String PRODUCTS_ID = "id";
     public static final String PRODUCTS_CATEGORY = "category";

@@ -1,6 +1,5 @@
 package com.epam.eshop.filter.service;
 
-import com.epam.eshop.dao.AllFilterValuesForMonitors;
 import com.epam.eshop.dao.Columns;
 import com.epam.eshop.entity.Category;
 import com.epam.eshop.entity.User;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Created by artch on 12.10.2020.
@@ -67,11 +66,6 @@ public class MonitorFilterService extends BaseFilterService {
         }
 
         super.updateConditions(filters);
-    }
-
-    @Override
-    public Map<String, List<String>> getAllValuesForFilters(AbstractFilters filters) {
-        return AllFilterValuesForMonitors.getAllValuesForFilters();
     }
 
     @Override

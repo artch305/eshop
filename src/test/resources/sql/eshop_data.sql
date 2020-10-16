@@ -1,8 +1,3 @@
-insert into user_statuses (id, user_status)
-values (1, 'active');
-insert into user_statuses (id, user_status)
-values (2, 'banned');
-
 
 insert into order_statuses (id, order_status)
 values (1, 'registered');
@@ -12,12 +7,12 @@ insert into order_statuses (id, order_status)
 values (3, 'canceled');
 
 
-insert into users (login, email, password, user_status_id, role, lang)
-values ('artch', 'artch@gmail.com', 'artchpass', 1, 'administrator', 'en');
-insert into users (login, email, password, user_status_id, role, lang)
-values ('ferian', 'ferian@ukr.net', 'ferianpass', 1, 'customer', 'ru');
-insert into users (login, email, password, user_status_id, role, lang)
-values ('mefist', 'mefist@gmail.com', 'mefistpass', 1, 'customer', 'ru');
+insert into users (login, email, password, status, role, lang)
+values ('artch', 'artch@gmail.com', 'artchpass', 'active', 'administrator', 'en');
+insert into users (login, email, password, status, role, lang)
+values ('ferian', 'ferian@ukr.net', 'ferianpass', 'active', 'customer', 'ru');
+insert into users (login, email, password, status, role, lang)
+values ('mefist', 'mefist@gmail.com', 'mefistpass', 'active', 'customer', 'ru');
 
 
 insert into products (category, producer, name, price, img_url)

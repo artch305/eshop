@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * This servlet processes action with {@link Order} in post requests. All available action names
+ * contain in privet constants. Action name becomes with request Param "actionOrder";
+ * Provides order details for order in get request.
+ *
  * Created by artch on 06.10.2020.
  */
 @WebServlet("/orders/*")

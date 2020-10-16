@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * This servlet forwards main.jsp for any requests
+ *
  * Created by artch on 23.09.2020.
  */
 @WebServlet("/main")

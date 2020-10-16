@@ -2,6 +2,7 @@ package com.epam.eshop.dao;
 
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
+import com.epam.eshop.entity.UserStatus;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -140,7 +141,7 @@ public class UserDAOTest extends AbstractTest {
         String newUserRole = UserRole.CUSTOMER.getRole();
         // FUNCTIONALITY
         User newUser = userDAO.setUser(connection, login, email, pass, userRole, userLang);
-        userDAO.updateUserData(connection, newUser.getId(), newLogin, newEmail, newUser.getPassword(), 2, newUserRole);
+        userDAO.updateUserData(connection, newUser.getId(), newLogin, newEmail, newUser.getPassword(), UserStatus.BANNED.getStatus(), newUserRole);
         User changedUser = userDAO.getUserByLoginAndPassword(connection, newLogin, pass);
         // TESTS
         assertNotNull(changedUser);

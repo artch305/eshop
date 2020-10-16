@@ -1,6 +1,7 @@
 package com.epam.eshop.controller.constants;
 
 /**
+ * Contains URLs for using in {@link javax.servlet.http.HttpServlet}
  * Created by artch on 15.10.2020.
  */
 public class URLConstants {

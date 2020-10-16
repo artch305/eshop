@@ -1,6 +1,7 @@
 package com.epam.eshop.filter.service;
 
 
+import com.epam.eshop.dao.AllValuesForFilters;
 import com.epam.eshop.dao.Columns;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.filter.AbstractFilters;
@@ -104,5 +105,8 @@ public abstract class BaseFilterService implements FilterService {
         throw new IllegalArgumentException("not implemented in parent");
     }
 
-
+    @Override
+    public AllValuesForFilters getAllValuesForFilters(AbstractFilters filters) {
+        return new AllValuesForFilters();
+    }
 }

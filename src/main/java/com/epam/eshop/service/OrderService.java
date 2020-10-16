@@ -23,10 +23,16 @@ public class OrderService {
 
     private OrderDAO orderDAO;
     private CartDAO cartDAO;
+    private ConnectionManager connectionManager;
 
     public OrderService() {
-        orderDAO = new OrderDAO();
-        cartDAO = new CartDAO();
+        this(new OrderDAO(), new CartDAO(), ConnectionManager.getInstance());
+    }
+
+    public OrderService(OrderDAO orderDAO, CartDAO cartDAO, ConnectionManager connectionManager) {
+        this.orderDAO = orderDAO;
+        this.cartDAO = cartDAO;
+        this.connectionManager = connectionManager;
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
@@ -35,7 +41,7 @@ public class OrderService {
         Connection connection = null;
 
         try {
-            connection = ConnectionManager.getInstance().getConnection();
+            connection = connectionManager.getConnection();
             connection.setAutoCommit(false);
 
             int orderId = orderDAO.setOrder(connection, user.getId());
@@ -81,7 +87,7 @@ public class OrderService {
     public List<Order> getAllOrders() {
         List<Order> orders;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             orders = orderDAO.getAllOrders(connection);
         } catch (SQLException e) {
             LOGGER.error("Can't obtain all orders", e);
@@ -94,7 +100,7 @@ public class OrderService {
     public List<Order> getOrdersByUser(User user) {
         List<Order> orders;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             orders = orderDAO.getAllOrdersByUserId(connection, user.getId());
 
         } catch (SQLException e) {
@@ -107,7 +113,7 @@ public class OrderService {
     public Order getOrderById(String orderId) {
         Order order;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             order = orderDAO.getOrderById(connection, orderId);
         } catch (SQLException e) {
             LOGGER.error("Can't obtain order by id |{}|", orderId, e);
@@ -120,7 +126,7 @@ public class OrderService {
     public Map<Product, Integer> getProductsInOrder(Order order) {
         Map<Product, Integer> productsInOrder;
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             productsInOrder = orderDAO.getProductsByOrderId(connection, order.getId());
 
         } catch (SQLException e) {
@@ -140,7 +146,7 @@ public class OrderService {
             return false;
         }
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             orderDAO.changeProductAmountInOrder(connection, orderId, productId, amount);
             return true;
         } catch (SQLException e) {
@@ -153,7 +159,7 @@ public class OrderService {
         int orderId = Integer.parseInt(orderIdStr);
         int productId = Integer.parseInt(productIdStr);
 
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             orderDAO.removeProductInOrder(connection, orderId, productId);
             return true;
         } catch (SQLException e) {
@@ -168,7 +174,7 @@ public class OrderService {
         int newStatusId = Integer.parseInt(newStatusIdStr);
 
         OrderDAO orderDAO = new OrderDAO();
-        try (Connection connection = ConnectionManager.getInstance().getConnection()) {
+        try (Connection connection = connectionManager.getConnection()) {
             orderDAO.changeOrderStatus(connection, orderId, newStatusId);
             return true;
         } catch (SQLException e) {

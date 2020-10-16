@@ -54,6 +54,7 @@
                             </c:if>
                         </c:when>
                     </c:choose>
+                    <br/>
                     <kbd><fmt:message key="product.price"/></kbd> ${product.price}$
                     <br/>
                     <br/>

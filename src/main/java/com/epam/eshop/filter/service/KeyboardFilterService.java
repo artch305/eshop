@@ -1,6 +1,5 @@
 package com.epam.eshop.filter.service;
 
-import com.epam.eshop.dao.AllFilterValuesForKeyboards;
 import com.epam.eshop.dao.Columns;
 import com.epam.eshop.entity.Category;
 import com.epam.eshop.entity.User;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -70,11 +68,6 @@ public class KeyboardFilterService extends BaseFilterService {
         }
 
         super.updateConditions(filters);
-    }
-
-    @Override
-    public Map<String, List<String>> getAllValuesForFilters(AbstractFilters filters) {
-        return AllFilterValuesForKeyboards.getAllValuesForFilters();
     }
 
     @Override

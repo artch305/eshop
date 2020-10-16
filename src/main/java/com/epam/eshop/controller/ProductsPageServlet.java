@@ -3,6 +3,7 @@ package com.epam.eshop.controller;
 import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.controller.constants.URLConstants;
+import com.epam.eshop.dao.AllValuesForFilters;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.filter.AbstractFilters;
@@ -18,9 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * This servlet processes {@link AbstractFilters} which contains in
+ * session attribute "filters". There several actions. Action name contains in request param "actionFilters".
+ * Also provides list {@link Product} which depending on filters(session attribute "filters"),
+ * current page (request param "page") and amount of {@link Product} on page(session attribute "productsOnPage")
  * Created by artch on 28.09.2020.
  */
 @WebServlet(value = "/products")
@@ -99,7 +103,7 @@ public class ProductsPageServlet extends HttpServlet {
             currentUserFilters = filterService.getFiltersForUser(user);
             session.setAttribute(AttributesNames.FILTERS, currentUserFilters);
 
-            Map<String, List<String>> allValuesForFilters = filterService.getAllValuesForFilters(currentUserFilters);
+            AllValuesForFilters allValuesForFilters = filterService.getAllValuesForFilters(currentUserFilters);
             session.setAttribute(AttributesNames.ALL_VALUES_FOR_FILTERS, allValuesForFilters);
         }
 

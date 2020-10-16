@@ -1,4 +1,5 @@
 <%@ page import="com.epam.eshop.entity.UserRole" %>
+<%@ page import="com.epam.eshop.entity.UserStatus" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -34,6 +35,8 @@
 
     <c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
     <c:set var="customer" value="<%=UserRole.CUSTOMER%>"/>
+    <c:set var="active" value="<%=UserStatus.ACTIVE%>"/>
+    <c:set var="banned" value="<%=UserStatus.BANNED%>"/>
 
     <table class="table table-striped">
         <thead>
@@ -66,10 +69,10 @@
             </td>
             <td>
                 <c:choose>
-                    <c:when test="${user.userStatus.status == 'active'}">
+                    <c:when test="${user.userStatus == active}">
                         <fmt:message key="active"/>
                     </c:when>
-                    <c:when test="${user.userStatus.status == 'banned'}">
+                    <c:when test="${user.userStatus == banned}">
                         <fmt:message key="banned"/>
                     </c:when>
                 </c:choose>
@@ -142,12 +145,12 @@
 
                                             <label for="sel1"><fmt:message key="status"/></label>
                                             <select class="form-control" id="sel1" name="status">
-                                                <option value="1" <c:if test="${user.userStatus.status == 'active'}">
+                                                <option value="${active.status}" <c:if test="${user.userStatus == active}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="active"/>
                                                 </option>
-                                                <option value="2" <c:if test="${user.userStatus.status == 'banned'}">
+                                                <option value="${banned.status}" <c:if test="${user.userStatus == banned}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="banned"/>
@@ -158,12 +161,12 @@
 
                                             <label for="sel2"><fmt:message key="role"/></label>
                                             <select class="form-control" id="sel2" name="role">
-                                                <option value="administrator" <c:if test="${user.userRole.role == 'administrator'}">
+                                                <option value="${administrator.role}" <c:if test="${user.userRole == administrator}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="administrator"/>
                                                 </option>
-                                                <option value="customer" <c:if test="${user.userRole.role == 'customer'}">
+                                                <option value="${customer.role}" <c:if test="${user.userRole == customer}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="customer"/>

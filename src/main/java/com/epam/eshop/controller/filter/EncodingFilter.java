@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * This class set StandardCharset UTF8 for all requests.
+ *
  * Created by artch on 23.09.2020.
  */
 @WebFilter("/*")

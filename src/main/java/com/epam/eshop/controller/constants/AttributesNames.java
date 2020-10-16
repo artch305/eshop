@@ -1,6 +1,7 @@
 package com.epam.eshop.controller.constants;
 
 /**
+ * Contains Attributes names for using in {@link javax.servlet.http.HttpServlet} and service classes
  * Created by artch on 15.10.2020.
  */
 public class AttributesNames {

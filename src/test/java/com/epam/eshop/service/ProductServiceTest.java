@@ -1,15 +1,17 @@
 package com.epam.eshop.service;
 
-import com.epam.eshop.dao.AbstractTest;
-import com.epam.eshop.dao.ConnectionManager;
-import com.epam.eshop.dao.MonitorProductDAO;
-import com.epam.eshop.dao.ProductDAO;
+import com.epam.eshop.controller.Util;
+import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.dao.*;
+import com.epam.eshop.entity.MonitorProduct;
 import com.epam.eshop.entity.Product;
 import com.epam.eshop.filter.AbstractFilters;
 import com.epam.eshop.filter.FiltersMonitorProducts;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +27,13 @@ public class ProductServiceTest extends AbstractTest {
 
     private ConnectionManager connectionManager;
     private ProductDAO productDAO;
+    private HttpServletRequest request;
 
     @Before
     public void initProductServiceTest() throws Exception {
         connectionManager = mock(ConnectionManager.class);
         productDAO = mock(MonitorProductDAO.class);
+        request = mock(HttpServletRequest.class);
         productService = new ProductService(productDAO,connectionManager);
     }
 
@@ -76,11 +80,31 @@ public class ProductServiceTest extends AbstractTest {
     @Test
     public void testUpdateProductData() throws Exception {
         // PREDICATE
+        String newProducer = "NEW_SAMSUNG";
+        String newName = "23dsad";
+        MonitorProductDAO monitorProductDAO = new MonitorProductDAO();
+        Product product = monitorProductDAO.getProductById(connection, "1");
+        MonitorProduct monitor = (MonitorProduct) product;
 
+        when(request.getParameter(ParameterNames.PRODUCT_ID)).thenReturn(String.valueOf(product.getId()));
+        when(request.getParameter(ParameterNames.CATEGORY)).thenReturn(product.getCategory().getDatabaseValue());
+        when(request.getParameter(ParameterNames.PRODUCER)).thenReturn(newProducer);
+        when(request.getParameter(ParameterNames.NAME)).thenReturn(newName);
+        when(request.getParameter(ParameterNames.PRICE)).thenReturn(String.valueOf(product.getPrice()));
+        when(request.getParameter(ParameterNames.DESCRIPTION)).thenReturn(product.getDescription());
+        when(request.getParameter(ParameterNames.ACTIVE)).thenReturn(String.valueOf(product.isActive()));
+        when(request.getParameter(ParameterNames.DIAGONAL)).thenReturn(String.valueOf(monitor.getDiagonal()));
+        when(request.getParameter(ParameterNames.PANEL_TYPE)).thenReturn(monitor.getPanelType());
+        when(request.getParameter(ParameterNames.BRIGHTNESS)).thenReturn(String.valueOf(monitor.getBrightness()));
+        when(request.getParameter(ParameterNames.IMG_URL)).thenReturn(product.getImgURL());
+        when(connectionManager.getConnection()).thenReturn(connection);
         // FUNCTIONALITY
-        fail();
-
+        productService.updateProductData(request);
+        Product changedProduct = monitorProductDAO.getProductById(connection,"1");
         // TESTS
+        verify(connectionManager).getConnection();
+        assertEquals(newProducer, changedProduct.getProducer());
+        assertEquals(newName, changedProduct.getName());
     }
 
     @Test

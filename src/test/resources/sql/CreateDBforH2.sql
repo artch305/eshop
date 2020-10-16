@@ -5,14 +5,7 @@ DROP TABLE IF EXISTS `products` CASCADE;
 DROP TABLE IF EXISTS `monitor_products` CASCADE;
 DROP TABLE IF EXISTS `keyboard_products` CASCADE;
 DROP TABLE IF EXISTS `cart` CASCADE;
-DROP TABLE IF EXISTS `user_statuses` CASCADE;
 DROP TABLE IF EXISTS `order_statuses` CASCADE;
-
-CREATE TABLE `user_statuses`
-(
-    `id`          INT         NOT NULL primary key,
-    `user_status` VARCHAR(45) NOT NULL
-);
 
 CREATE TABLE `users`
 (
@@ -20,16 +13,11 @@ CREATE TABLE `users`
     `login`             VARCHAR(45) NOT NULL UNIQUE,
     `email`             VARCHAR(45) NULL UNIQUE,
     `password`          VARCHAR(45) NOT NULL,
-    `user_status_id`    INT         NOT NULL,
+    `status`            VARCHAR(45),
     `role`              VARCHAR(45) ,
     `registration_date` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `lang`              VARCHAR(45) ,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `fk_users_user_statuses1`
-        FOREIGN KEY (`user_status_id`)
-            REFERENCES `user_statuses` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `order_statuses`

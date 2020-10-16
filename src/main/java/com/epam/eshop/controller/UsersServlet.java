@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * This servlet change {@link User} data in post request. Before changing, checks correct input data.
+ * Also provides list {@link User} in get request
+ *
  * Created by artch on 07.10.2020.
  */
 @WebServlet("/users")
@@ -32,10 +35,10 @@ public class UsersServlet extends HttpServlet {
         String newLogin = request.getParameter(ParameterNames.LOGIN).trim();
         String newEmail = request.getParameter(ParameterNames.EMAIL).trim();
         String newPassword = request.getParameter(ParameterNames.PASSWORD).trim();
-        int newUserStatusId = Integer.parseInt(request.getParameter(ParameterNames.USER_STATUS));
+        String newUserStatus = request.getParameter(ParameterNames.USER_STATUS);
         String newUserRole = request.getParameter(ParameterNames.USER_ROLE); // TODO: 14.10.2020 wrap all these parameters into DTO (data-transfer object) to hold and transfer it and reduce amount of parameters in method signature
 
-        String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRole);
+        String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatus, newUserRole);
 
         if (errorMessage == null) {
             request.getSession().setAttribute(AttributesNames.SUCCESS, "success");

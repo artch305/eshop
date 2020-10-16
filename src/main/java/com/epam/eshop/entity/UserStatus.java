@@ -1,28 +1,28 @@
 package com.epam.eshop.entity;
 
+import java.util.Arrays;
+
 /**
- * Created by artch on 22.09.2020.
+ * Created by artch on 16.10.2020.
  */
-public class UserStatus {
-    public static final String ACTIVE = "active";
-    public static final String BANNED = "banned";
-    
-    private int id;
+public enum UserStatus {
+    ACTIVE("active"),
+    BANNED("banned");
+
     private String status;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    UserStatus(String status) {
+        this.status = status;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String name) {
-        this.status = name;
+    public static UserStatus getUserStatusByName(String status) {
+        return Arrays.stream(values())
+                .filter(categoryEnum -> categoryEnum.getStatus().equals(status))
+                .findFirst()
+                .orElseThrow(() -> new IllegalAccessError("Not found category - " + status));
     }
 }

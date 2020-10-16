@@ -85,10 +85,11 @@ public class KeyboardProductDAO extends BaseProductDAO {
     public void updateProduct(Connection connection, Map<String, String> values) throws SQLException {
         super.updateProduct(connection,values);
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_MONITOR_DATA)) {
-            preparedStatement.setString(1, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
-            preparedStatement.setString(2, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
-            preparedStatement.setString(3, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
-            preparedStatement.setString(4, values.get(Columns.PRODUCTS_ID));
+            int numberColumn = 1;
+            preparedStatement.setString(numberColumn++, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
+            preparedStatement.setString(numberColumn++, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
+            preparedStatement.setString(numberColumn++, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
+            preparedStatement.setString(numberColumn, values.get(Columns.PRODUCTS_ID));
             preparedStatement.execute();
         }
     }
@@ -98,10 +99,11 @@ public class KeyboardProductDAO extends BaseProductDAO {
         int newProductId = super.addNewProduct(connection, values);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEW_KEYBOARD)) {
-            preparedStatement.setInt(1, newProductId);
-            preparedStatement.setString(2, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
-            preparedStatement.setString(3, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
-            preparedStatement.setString(4, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
+            int numberColumn = 1;
+            preparedStatement.setInt(numberColumn++, newProductId);
+            preparedStatement.setString(numberColumn++, values.get(Columns.KEYBOARD_PRODUCTS_CONNECTION_TYPE));
+            preparedStatement.setString(numberColumn++, values.get(Columns.KEYBOARD_PRODUCTS_MECHANICAL));
+            preparedStatement.setString(numberColumn, values.get(Columns.KEYBOARD_PRODUCTS_LIGHT_COLOR));
             preparedStatement.execute();
         }
         return newProductId;

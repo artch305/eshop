@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
+ * This servlet using for change language for {@link User} and save chosen language in database
+ *
  * Created by artch on 25.09.2020.
  */
 @WebServlet("/lang")

@@ -110,7 +110,7 @@ public class UserService {
         }
     }
 
-    public String changeUserData(int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, String newUserRole) {
+    public String changeUserData(int userId, String newLogin, String newEmail, String newPassword, String newUserStatus, String newUserRole) {
         if (isEmptyField(newLogin, newEmail, newPassword)) {
             return "emptyField";
         }
@@ -126,7 +126,7 @@ public class UserService {
                 return "existEmail";
             }
 
-            userDAO.updateUserData(connection, userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRole);
+            userDAO.updateUserData(connection, userId, newLogin, newEmail, newPassword, newUserStatus, newUserRole);
             usersInCache = null;
             return null;
         } catch (SQLException e) {

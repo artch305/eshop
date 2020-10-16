@@ -16,6 +16,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
+ * This servlet processes registration logic. Input params become with request param ("login", "password", "email").
+ * if input data incorrect, in request put errorMessage with description.
+ *
  * Created by artch on 24.09.2020.
  */
 @WebServlet("/registration")

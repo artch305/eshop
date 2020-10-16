@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
+ * This servlet using for check user data for loggining, create instance {@link User}
+ * and put it to {@link HttpSession} if data was correct. If not - responses error message.
  * Created by artch on 22.09.2020.
  */
 @WebServlet("/login")
@@ -46,7 +48,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        if (UserStatus.BANNED.equals(user.getUserStatus().getStatus())) {
+        if (UserStatus.BANNED.equals(user.getUserStatus())) {
             response.sendRedirect(request.getContextPath() + URLConstants.ERROR_BANNED_JSP);
             return;
         }
