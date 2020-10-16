@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS `products` CASCADE;
 DROP TABLE IF EXISTS `monitor_products` CASCADE;
 DROP TABLE IF EXISTS `keyboard_products` CASCADE;
 DROP TABLE IF EXISTS `cart` CASCADE;
-DROP TABLE IF EXISTS `user_settings` CASCADE;
 DROP TABLE IF EXISTS `user_statuses` CASCADE;
 DROP TABLE IF EXISTS `user_roles` CASCADE;
 DROP TABLE IF EXISTS `order_statuses` CASCADE;
@@ -31,6 +30,7 @@ CREATE TABLE `users`
     `user_status_id`    INT         NOT NULL,
     `user_role_id`      INT         NOT NULL,
     `registration_date` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `lang`              VARCHAR(45) ,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_users_user_statuses1`
         FOREIGN KEY (`user_status_id`)
@@ -134,19 +134,6 @@ CREATE TABLE `keyboard_products`
             REFERENCES `products` (`id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION
-);
-
-CREATE TABLE `user_settings`
-(
-`id`       INT         NOT NULL AUTO_INCREMENT,
-`users_id` INT         NOT NULL,
-`language` VARCHAR(45) NULL,
-PRIMARY KEY (`id`),
-CONSTRAINT `fk_user_settings_users1`
-FOREIGN KEY (`users_id`)
-REFERENCES `users` (`id`)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
 );
 
 CREATE TABLE `cart`

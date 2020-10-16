@@ -45,9 +45,10 @@ public class UserDAOTest extends AbstractTest {
         String userLogin = "Zaharian";
         String userPass = "zaharianpass";
         String userEmail = "zaharian@gmail.com";
+        String userLang = "ru";
 
         // FUNCTIONALITY
-        User newUser = userDAO.setUser(connection, userLogin, userEmail, userPass, 2);
+        User newUser = userDAO.setUser(connection, userLogin, userEmail, userPass, 2, userLang);
 
         // TESTS
         assertNotNull(newUser);
@@ -86,35 +87,14 @@ public class UserDAOTest extends AbstractTest {
     }
 
     @Test
-    public void testGetUserSettings() throws Exception {
-        // PREDICATE
-        User user = userDAO.getUserById(connection, 1);
-        // FUNCTIONALITY
-        UserSettings userSettings = userDAO.getUserSettings(connection, user);
-        // TESTS
-        assertEquals("en", userSettings.getLanguage());
-    }
-
-    @Test
     public void testSetUserLang() throws Exception {
         // PREDICATE
-        User user = userDAO.setUser(connection, "asd", "asd@gmail.com", "asdpass", 2);
+        User user = userDAO.getUserById(connection,2);
         // FUNCTIONALITY
         userDAO.setUserLang(connection, user, "en");
-        UserSettings userSettings = userDAO.getUserSettings(connection, user);
+        User updatedUser = userDAO.getUserById(connection,2);
         // TESTS
-        assertEquals("en", userSettings.getLanguage());
-    }
-
-    @Test
-    public void testUpdateUserLang() throws Exception {
-        // PREDICATE
-        User user = userDAO.getUserById(connection, 2);
-        // FUNCTIONALITY
-        userDAO.updateUserLang(connection, user, "en");
-        UserSettings userSettings = userDAO.getUserSettings(connection, user);
-        // TESTS
-        assertEquals("en", userSettings.getLanguage());
+        assertEquals("en", updatedUser.getLang());
     }
 
     @Test
@@ -153,12 +133,13 @@ public class UserDAOTest extends AbstractTest {
         String login = "rty";
         String email = "rty@gamil.com";
         String pass = "rtypass";
+        String userLang = "ru";
         int userRoleId = 1;
         String newLogin = "zxc";
         String newEmail = "zxc@gmail.com";
         int newUserRoleId = 2;
         // FUNCTIONALITY
-        User newUser = userDAO.setUser(connection, login, email, pass, userRoleId);
+        User newUser = userDAO.setUser(connection, login, email, pass, userRoleId, userLang);
         userDAO.updateUserData(connection, newUser.getId(), newLogin, newEmail, newUser.getPassword(), 2, newUserRoleId);
         User changedUser = userDAO.getUserByLoginAndPassword(connection, newLogin, pass);
         // TESTS

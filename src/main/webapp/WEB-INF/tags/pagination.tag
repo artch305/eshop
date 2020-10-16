@@ -11,11 +11,11 @@
     }
 
     String currentLocal;
-    if (session.getAttribute(AttributesNames.LANGUAGE) == null) {
+    if (session.getAttribute(AttributesNames.LANG) == null) {
         currentLocal = request.getLocale().getLanguage();
-        session.setAttribute(AttributesNames.LANGUAGE, currentLocal);
+        session.setAttribute(AttributesNames.LANG, currentLocal);
     }
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag((String) session.getAttribute(AttributesNames.LANGUAGE)));
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag((String) session.getAttribute(AttributesNames.LANG)));
 
     int pages;
     if (maxItems % productsOnPage > 0) {

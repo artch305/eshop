@@ -74,27 +74,7 @@ public class UserServiceTest extends AbstractTest {
         // TESTS
     }
 
-    @Test
-    public void testGetUserSettings() throws Exception {
-        // PREDICATE
-        UserSettings userSettings = new UserSettings();
-        int userId = 1;
-        String language = "en";
-        userSettings.setUserId(userId);
-        userSettings.setLanguage(language);
-        User user = new User();
-        user.setId(userId);
 
-        when(connectionManager.getConnection()).thenReturn(connection);
-        when(userDao.getUserSettings(connection, user)).thenReturn(userSettings);
-        // FUNCTIONALITY
-        UserSettings userSettings1 = userService.getUserSettings(user);
-        // TESTS
-        assertNotNull(userSettings1);
-
-        verify(connectionManager).getConnection();
-        verify(userDao).getUserSettings(connection, user);
-    }
 
     @Test
     public void testGetErrorMessageInRegistrationData() throws Exception {
@@ -130,20 +110,22 @@ public class UserServiceTest extends AbstractTest {
         String login = "zaharian";
         String email = "zaharian@gmail.com";
         String pass = "zaharianpass";
+        String userLang = "lang";
         user.setId(1);
         user.setLogin(login);
         user.setEmail(email);
         user.setPassword(pass);
+        user.setLang(userLang);
 
         when(connectionManager.getConnection()).thenReturn(connection);
-        when(userDao.setUser(connection, login, email, pass, 2)).thenReturn(user);
+        when(userDao.setUser(connection, login, email, pass, 2, userLang)).thenReturn(user);
         // FUNCTIONALITY
-        User user1 = userService.setUser(login, email, pass);
+        User user1 = userService.setUser(login, email, pass, userLang);
         // TESTS
         assertNotNull(user1);
         assertEquals(user, user1);
         verify(connectionManager).getConnection();
-        verify(userDao).setUser(connection, login, email, pass, 2);
+        verify(userDao).setUser(connection, login, email, pass, 2, userLang);
     }
 
     @Test
@@ -157,19 +139,6 @@ public class UserServiceTest extends AbstractTest {
         // TESTS
         verify(connectionManager).getConnection();
         verify(userDao).setUserLang(connection, user, lang);
-    }
-
-    @Test
-    public void testUpdateUserLang() throws Exception {
-        // PREDICATE
-        User user = new User();
-        String lang = "ru";
-        when(connectionManager.getConnection()).thenReturn(connection);
-        // FUNCTIONALITY
-        userService.updateUserLang(user, lang);
-        // TESTS
-        verify(connectionManager).getConnection();
-        verify(userDao).updateUserLang(connection, user, lang);
     }
 
     @Test

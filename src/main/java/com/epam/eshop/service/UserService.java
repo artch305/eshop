@@ -63,18 +63,6 @@ public class UserService {
         return user;
     }
 
-    public UserSettings getUserSettings(User user) {
-        UserSettings userSettings;
-
-        try (Connection connection = connectionManager.getConnection()) {
-            userSettings = userDAO.getUserSettings(connection, user);
-        } catch (SQLException e) {
-            LOGGER.error("Can't get userSettings for user |{}|", user.getLogin(), e);
-            throw new DBException("Can't get user settings", e);
-        }
-        return userSettings;
-    }
-
     public String getErrorMessageInRegistrationData(String login, String email) {
         if (login.isEmpty() || email.isEmpty()) {
             return "emptyField";
@@ -97,11 +85,11 @@ public class UserService {
         return null;
     }
 
-    public User setUser(String login, String email, String password) {
+    public User setUser(String login, String email, String password, String lang) {
         User user;
 
         try (Connection connection = connectionManager.getConnection()) {
-            user = userDAO.setUser(connection, login, email, password, 2);
+            user = userDAO.setUser(connection, login, email, password, 2, lang);
             usersInCache = null;
         } catch (SQLException e) {
             LOGGER.error("Can't set user |{}|", login, e);
@@ -112,23 +100,13 @@ public class UserService {
 
     }
 
-    public void setUserLang(User newUser, String local) {
+    public void setUserLang(User user, String local) {
 
         try (Connection connection = connectionManager.getConnection()) {
-            userDAO.setUserLang(connection, newUser, local);
+            userDAO.setUserLang(connection, user, local);
         } catch (SQLException e) {
-            LOGGER.error("Can't set user language for user |{}|", newUser.getLogin(), e);
+            LOGGER.error("Can't set user language for user |{}|", user.getLogin(), e);
             throw new DBException("Can't set language for user", e);
-        }
-    }
-
-    public void updateUserLang(User user, String language) {
-
-        try (Connection connection = connectionManager.getConnection()) {
-            userDAO.updateUserLang(connection, user, language);
-        } catch (SQLException e) {
-            LOGGER.error("Can't update user |{}| language |{}|", user.getLogin(), language, e);
-            throw new DBException("Can't update language for user", e);
         }
     }
 

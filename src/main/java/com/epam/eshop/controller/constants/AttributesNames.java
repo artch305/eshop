@@ -6,7 +6,7 @@ package com.epam.eshop.controller.constants;
 public class AttributesNames {
     public static final String CURRENT_USER = "currentUser";
     public static final String SUCCESS = "success";
-    public static final String LANGUAGE = "lang";
+    public static final String LANG = "lang";
     public static final String ERROR_LOGIN = "errorLogin";
     public static final String CURRENT_USER_CART = "currentUserCart";
     public static final String ORDERS = "orders";

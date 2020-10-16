@@ -48,9 +48,9 @@ public class PrintProductsInOrderOrCart extends TagSupport {
         order = (Order) pageContext.getRequest().getAttribute(AttributesNames.CURRENT_ORDER);
         JspWriter out = pageContext.getOut();
 
-        if (pageContext.getSession().getAttribute(AttributesNames.LANGUAGE) == null) {
+        if (pageContext.getSession().getAttribute(AttributesNames.LANG) == null) {
             currentLocale = pageContext.getRequest().getLocale().getLanguage();
-            pageContext.getSession().setAttribute(AttributesNames.LANGUAGE, currentLocale);
+            pageContext.getSession().setAttribute(AttributesNames.LANG, currentLocale);
         }
 
         rb = ResourceBundle.getBundle("messages", Locale.forLanguageTag((String) pageContext.getSession().getAttribute("lang")));

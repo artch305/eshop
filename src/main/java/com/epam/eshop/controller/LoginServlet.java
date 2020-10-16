@@ -5,7 +5,6 @@ import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.User;
-import com.epam.eshop.entity.UserSettings;
 import com.epam.eshop.entity.UserStatus;
 import com.epam.eshop.service.CartService;
 import com.epam.eshop.service.UserService;
@@ -55,8 +54,7 @@ public class LoginServlet extends HttpServlet {
         session.removeAttribute(AttributesNames.ERROR_LOGIN);
         session.setAttribute(AttributesNames.CURRENT_USER, user);
 
-        UserSettings userSettings = userService.getUserSettings(user);
-        session.setAttribute(AttributesNames.LANGUAGE, userSettings.getLanguage());
+        session.setAttribute(AttributesNames.LANG, user.getLang());
 
         Cart currentUserCart = new Cart();
         cartService.fillCurrentUserCart(user, currentUserCart);

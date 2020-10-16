@@ -2,7 +2,6 @@ package com.epam.eshop.dao;
 
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
-import com.epam.eshop.entity.UserSettings;
 import com.epam.eshop.entity.UserStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +23,11 @@ public class UserDAO {
             "join user_roles on users.user_role_id = user_roles.id " +
             "join user_statuses on users.user_status_id = user_statuses.id " +
             "WHERE login = ?";
-    private final static String SQL_SET_USER = "INSERT INTO users (login, email, password, user_status_id, user_role_id) " +
-            "VALUES (?,?,?,?,?)";
+    private final static String SQL_SET_USER = "INSERT INTO users (login, email, password, user_status_id, user_role_id, lang) " +
+            "VALUES (?,?,?,?,?,?)";
     private final static String SQL_CHECK_LOGIN = "SELECT id FROM users where login = ?";
     private final static String SQL_CHECK_EMAIL = "SELECT id FROM users where email = ?";
-    private final static String SQL_GET_USER_SETTINGS = "SELECT * FROM user_settings WHERE users_id = ?";
-    private final static String SQL_SET_USER_SETTINGS = "INSERT INTO user_settings (users_id, language) values (?, ?)";
-    private final static String SQL_UPDATE_USER_SETTINGS = "UPDATE user_settings set language = ? WHERE users_id = ?";
+    private final static String SQL_SET_USER_LANG = "update users set lang = ? where id = ?";
     private final static String SQL_GET_ALL_USERS = "select * from users join user_roles on users.user_role_id = user_roles.id " +
             "join user_statuses on users.user_status_id = user_statuses.id";
     private final static String SQL_GET_USER_BY_ID = "select * from users " +
@@ -64,6 +61,7 @@ public class UserDAO {
         user.setPassword(resultSet.getString(Columns.USERS_PASSWORD));
         user.setEmail(resultSet.getString(Columns.USERS_EMAIL));
         user.setRegistrationDate(resultSet.getString(Columns.USERS_REGISTRATION_DATE));
+        user.setLang(resultSet.getString(Columns.USERS_LANG));
 
         fillUserStatus(user, resultSet);
 
@@ -85,7 +83,7 @@ public class UserDAO {
         user.setUserStatus(userStatus);
     }
 
-    public User setUser(Connection connection, String login, String email, String password, int userRoleId) throws SQLException {
+    public User setUser(Connection connection, String login, String email, String password, int userRoleId, String lang) throws SQLException {
         User newUser;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER)) {
@@ -94,6 +92,7 @@ public class UserDAO {
             preparedStatement.setString(3, password);
             preparedStatement.setString(4, "1"); // TODO: 14.10.2020 what is it? enum like order status?
             preparedStatement.setString(5, String.valueOf(userRoleId));
+            preparedStatement.setString(6, lang);
             preparedStatement.execute();
 
             newUser = getUserByLoginAndPassword(connection, login, password);
@@ -126,42 +125,16 @@ public class UserDAO {
         return false;
     }
 
-    public UserSettings getUserSettings(Connection connection, User user) throws SQLException {
-        UserSettings userSettings = null;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_USER_SETTINGS)) {
-            preparedStatement.setString(1, String.valueOf(user.getId()));
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                userSettings = new UserSettings();
-                userSettings.setLanguage(resultSet.getString(Columns.USER_SETTINGS_LANGUAGE));
-            }
-        }
-        return userSettings;
-    }
-
     public void setUserLang(Connection connection, User user, String lang) throws SQLException {
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER_SETTINGS)) {
-            preparedStatement.setString(1, String.valueOf(user.getId()));
-            preparedStatement.setString(2, lang);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER_LANG)) {
+            preparedStatement.setString(1, lang);
+            preparedStatement.setString(2, String.valueOf(user.getId()));
             preparedStatement.execute();
 
             LOGGER.info("Lang for user - |{}| has been set on |{}|", user.getLogin(), lang);
         }
     }
-
-    public void updateUserLang(Connection connection, User user, String lang) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_SETTINGS)) {
-            preparedStatement.setString(1, lang);
-            preparedStatement.setString(2, String.valueOf(user.getId()));
-            preparedStatement.execute();
-
-            LOGGER.info("Lang for user - |{}| has been updated on |{}|", user.getLogin(), lang);
-        }
-    }
-
 
     public List<User> getAllUsers(Connection connection) throws SQLException {
         List<User> users = new ArrayList<>();

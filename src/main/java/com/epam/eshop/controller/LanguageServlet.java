@@ -26,16 +26,15 @@ public class LanguageServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String language = request.getParameter(AttributesNames.LANGUAGE);
+        String lang = request.getParameter(AttributesNames.LANG);
 
         HttpSession session = request.getSession();
-        session.setAttribute(AttributesNames.LANGUAGE, language);
+        session.setAttribute(AttributesNames.LANG, lang);
 
         User user = Util.getUserFromSession(session);
 
         if (user != null) {
-            userService = new UserService();
-            userService.updateUserLang(user, language);
+            userService.setUserLang(user, lang);
         }
 
         response.sendRedirect(request.getContextPath() + URLConstants.MAIN);

@@ -14,6 +14,15 @@ public class User {
     private UserStatus userStatus;
     private UserRole userRole;
     private String registrationDate;
+    private String lang;
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 
     public String getRegistrationDate() {
         return registrationDate;

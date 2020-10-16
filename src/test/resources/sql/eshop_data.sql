@@ -18,12 +18,12 @@ insert into user_roles (id, user_role)
 values (2, 'customer');
 
 
-insert into users (login, email, password, user_status_id, user_role_id)
-values ('artch', 'artch@gmail.com', 'artchpass', 1, 1);
-insert into users (login, email, password, user_status_id, user_role_id)
-values ('ferian', 'ferian@ukr.net', 'ferianpass', 1, 2);
-insert into users (login, email, password, user_status_id, user_role_id)
-values ('mefist', 'mefist@gmail.com', 'mefistpass', 1, 2);
+insert into users (login, email, password, user_status_id, user_role_id, lang)
+values ('artch', 'artch@gmail.com', 'artchpass', 1, 1, 'en');
+insert into users (login, email, password, user_status_id, user_role_id, lang)
+values ('ferian', 'ferian@ukr.net', 'ferianpass', 1, 2, 'ru');
+insert into users (login, email, password, user_status_id, user_role_id, lang)
+values ('mefist', 'mefist@gmail.com', 'mefistpass', 1, 2, 'ru');
 
 
 insert into products (category, producer, name, price, img_url)
@@ -141,10 +141,3 @@ values (2, 1, 3);
 insert into orders_has_products (order_id, product_id, amount)
 values (2, 2, 5);
 
-
-insert into user_settings (users_id, language)
-VALUES (1, 'en');
-insert into user_settings (users_id, language)
-VALUES (2, 'ru');
-insert into user_settings (users_id, language)
-VALUES (3, 'ru');

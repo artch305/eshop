@@ -39,20 +39,18 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        String currentLocale;
+        String currentLang;
 
-        if (session.getAttribute(AttributesNames.LANGUAGE) == null) {
-            currentLocale = request.getLocale().getLanguage();
-            session.setAttribute(AttributesNames.LANGUAGE, currentLocale);
+        if (session.getAttribute(AttributesNames.LANG) == null) {
+            currentLang = request.getLocale().getLanguage();
+            session.setAttribute(AttributesNames.LANG, currentLang);
         } else {
-            currentLocale = (String) session.getAttribute(AttributesNames.LANGUAGE);
+            currentLang = (String) session.getAttribute(AttributesNames.LANG);
         }
 
         String password = request.getParameter(ParameterNames.PASSWORD);
-        User newUser = userService.setUser(login, email, password);
+        User newUser = userService.setUser(login, email, password, currentLang);
         session.setAttribute(AttributesNames.CURRENT_USER, newUser);
-
-        userService.setUserLang(newUser, currentLocale);
 
         Cart currentUserCart = new Cart();
         currentUserCart.setUserId(newUser.getId());
