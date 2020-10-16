@@ -95,8 +95,4 @@ public class KeyboardFilterService extends BaseFilterService {
         return filters;
     }
 
-    @Override
-    public String getFiltersCategory() {
-        return Category.KEYBOARDS.getDatabaseValue();
-    }
 }

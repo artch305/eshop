@@ -94,8 +94,4 @@ public class MonitorFilterService extends BaseFilterService {
         return filters;
     }
 
-    @Override
-    public String getFiltersCategory() {
-        return Category.MONITORS.getDatabaseValue();
-    }
 }
