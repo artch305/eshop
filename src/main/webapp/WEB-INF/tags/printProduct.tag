@@ -57,7 +57,7 @@
                     <kbd><fmt:message key="product.price"/></kbd> ${product.price}$
                     <br/>
                     <br/>
-                    <c:if test="<%=(user != null && user.getUserRole().getRole().equals(UserRole.ADMINISTRATOR))%>">
+                    <c:if test="<%=(user != null && UserRole.ADMINISTRATOR.equals(user.getUserRole()))%>">
                         <c:choose>
                             <c:when test="${product.active}">
                                 <span class="badge badge-primary"><fmt:message key="product.active"/></span>
@@ -78,7 +78,7 @@
                     </div>
 
                     <c:choose>
-                        <c:when test="<%=(user != null && user.getUserRole().getRole().equals(UserRole.CUSTOMER))%>">
+                        <c:when test="<%=(user != null && UserRole.CUSTOMER.equals(user.getUserRole()))%>">
                             <div class="row">
                                 <form id="add_form${product.id}" onsubmit="return addToCart('add_form${product.id}')"
                                       action="${pageContext.request.contextPath}/cart" method="post">
@@ -91,7 +91,7 @@
                                 </form>
                             </div>
                         </c:when>
-                        <c:when test="<%=(user != null && user.getUserRole().getRole().equals(UserRole.ADMINISTRATOR))%>">
+                        <c:when test="<%=(user != null && UserRole.ADMINISTRATOR.equals(user.getUserRole()))%>">
                             <div class="row">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal${product.id}"
                                          style="margin: 5px 5px">

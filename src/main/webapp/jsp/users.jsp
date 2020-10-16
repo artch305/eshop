@@ -1,6 +1,7 @@
+<%@ page import="com.epam.eshop.entity.UserRole" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="customTags" %>
 <html>
@@ -31,6 +32,9 @@
         </div>
     </c:if>
 
+    <c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
+    <c:set var="customer" value="<%=UserRole.CUSTOMER%>"/>
+
     <table class="table table-striped">
         <thead>
         <tr class="table-primary">
@@ -52,10 +56,10 @@
             <td>${user.registrationDate}</td>
             <td>
             <c:choose>
-                <c:when test="${user.userRole.role == 'administrator'}">
+                <c:when test="${user.userRole == administrator}">
                     <fmt:message key="administrator"/>
                 </c:when>
-                <c:when test="${user.userRole.role == 'customer'}">
+                <c:when test="${user.userRole == customer}">
                     <fmt:message key="customer"/>
                 </c:when>
             </c:choose>
@@ -154,12 +158,12 @@
 
                                             <label for="sel2"><fmt:message key="role"/></label>
                                             <select class="form-control" id="sel2" name="role">
-                                                <option value="1" <c:if test="${user.userRole.role == 'administrator'}">
+                                                <option value="administrator" <c:if test="${user.userRole.role == 'administrator'}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="administrator"/>
                                                 </option>
-                                                <option value="2" <c:if test="${user.userRole.role == 'customer'}">
+                                                <option value="customer" <c:if test="${user.userRole.role == 'customer'}">
                                                     selected
                                                 </c:if>>
                                                     <fmt:message key="customer"/>

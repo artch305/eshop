@@ -84,7 +84,7 @@ public class ProductsPageServlet extends HttpServlet {
         session.setAttribute(AttributesNames.PRODUCTS, products);
 
         session.setAttribute(AttributesNames.MAX_ITEMS, productService.getMaxItems(currentUserFilters));
-        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+        Util.replaceAttributeFromSessionIntoRequest(request, AttributesNames.SUCCESS);
 
         request.getRequestDispatcher(URLConstants.PRODUCTS_JSP).forward(request, response);
     }

@@ -1,7 +1,7 @@
 package com.epam.eshop.dao;
 
 import com.epam.eshop.entity.User;
-import com.epam.eshop.entity.UserSettings;
+import com.epam.eshop.entity.UserRole;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,14 +48,14 @@ public class UserDAOTest extends AbstractTest {
         String userLang = "ru";
 
         // FUNCTIONALITY
-        User newUser = userDAO.setUser(connection, userLogin, userEmail, userPass, 2, userLang);
+        User newUser = userDAO.setUser(connection, userLogin, userEmail, userPass, UserRole.CUSTOMER.getRole(), userLang);
 
         // TESTS
         assertNotNull(newUser);
         assertEquals(userLogin, newUser.getLogin());
         assertEquals(userEmail, newUser.getEmail());
         assertEquals(userPass, newUser.getPassword());
-        assertEquals(2, newUser.getUserRole().getId());
+        assertEquals(UserRole.CUSTOMER, newUser.getUserRole());
     }
 
     @Test
@@ -134,18 +134,18 @@ public class UserDAOTest extends AbstractTest {
         String email = "rty@gamil.com";
         String pass = "rtypass";
         String userLang = "ru";
-        int userRoleId = 1;
+        String userRole = UserRole.ADMINISTRATOR.getRole();
         String newLogin = "zxc";
         String newEmail = "zxc@gmail.com";
-        int newUserRoleId = 2;
+        String newUserRole = UserRole.CUSTOMER.getRole();
         // FUNCTIONALITY
-        User newUser = userDAO.setUser(connection, login, email, pass, userRoleId, userLang);
-        userDAO.updateUserData(connection, newUser.getId(), newLogin, newEmail, newUser.getPassword(), 2, newUserRoleId);
+        User newUser = userDAO.setUser(connection, login, email, pass, userRole, userLang);
+        userDAO.updateUserData(connection, newUser.getId(), newLogin, newEmail, newUser.getPassword(), 2, newUserRole);
         User changedUser = userDAO.getUserByLoginAndPassword(connection, newLogin, pass);
         // TESTS
         assertNotNull(changedUser);
         assertEquals(changedUser.getLogin(), newLogin);
         assertEquals(changedUser.getEmail(), newEmail);
-        assertEquals(changedUser.getUserRole().getId(), newUserRoleId);
+        assertEquals(changedUser.getUserRole().getRole(), newUserRole);
     }
 }

@@ -1,30 +1,28 @@
 package com.epam.eshop.entity;
 
+import java.util.Arrays;
+
 /**
- * Created by artch on 22.09.2020.
+ * Created by artch on 16.10.2020.
  */
-public class UserRole {
-    
-    public static final String ADMINISTRATOR = "administrator";
-    public static final String CUSTOMER = "customer";
-    
-    private int id;
+public enum UserRole {
+    ADMINISTRATOR("administrator"),
+    CUSTOMER("customer");
+
     private String role;
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    UserRole(String role) {
+        this.role = role;
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole(String name) {
-        this.role = name;
+    public static UserRole getUserRoleByName(String role) {
+        return Arrays.stream(values())
+                .filter(categoryEnum -> categoryEnum.getRole().equals(role))
+                .findFirst()
+                .orElseThrow(() -> new IllegalAccessError("Not found category - " + role));
     }
 }

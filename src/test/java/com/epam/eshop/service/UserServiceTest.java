@@ -5,7 +5,6 @@ import com.epam.eshop.dao.ConnectionManager;
 import com.epam.eshop.dao.UserDAO;
 import com.epam.eshop.entity.User;
 import com.epam.eshop.entity.UserRole;
-import com.epam.eshop.entity.UserSettings;
 import com.epam.eshop.entity.UserStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,14 +117,14 @@ public class UserServiceTest extends AbstractTest {
         user.setLang(userLang);
 
         when(connectionManager.getConnection()).thenReturn(connection);
-        when(userDao.setUser(connection, login, email, pass, 2, userLang)).thenReturn(user);
+        when(userDao.setUser(connection, login, email, pass, UserRole.CUSTOMER.getRole(), userLang)).thenReturn(user);
         // FUNCTIONALITY
         User user1 = userService.setUser(login, email, pass, userLang);
         // TESTS
         assertNotNull(user1);
         assertEquals(user, user1);
         verify(connectionManager).getConnection();
-        verify(userDao).setUser(connection, login, email, pass, 2, userLang);
+        verify(userDao).setUser(connection, login, email, pass, UserRole.CUSTOMER.getRole(), userLang);
     }
 
     @Test
@@ -149,7 +148,7 @@ public class UserServiceTest extends AbstractTest {
         String newUserEmail = "qwe@gmail.com";
         String newUserPassword = "qwepass";
         int newUserStatusId = 2;
-        int newUserRoleId = 2;
+        String newUserRole = UserRole.CUSTOMER.getRole();
         String newExistLogin = "mefist";
         String newExistEmail = "mefist@gmail.com";
 
@@ -158,16 +157,12 @@ public class UserServiceTest extends AbstractTest {
         user.setLogin("artch");
         user.setEmail("artch@gmail.com");
         user.setPassword("artchpass");
-
-        UserRole userRole = new UserRole();
-        userRole.setId(1);
-        userRole.setRole(UserRole.ADMINISTRATOR);
-        user.setUserRole(userRole);
+        user.setUserRole(UserRole.ADMINISTRATOR);
 
         UserStatus userStatus = new UserStatus();
         userStatus.setId(1);
         userStatus.setStatus(UserStatus.ACTIVE);
-        user.setUserRole(userRole);
+        user.setUserStatus(userStatus);
 
         when(connectionManager.getConnection()).thenReturn(connection);
         when(userDao.existLogin(connection, newUserLogin)).thenReturn(false);
@@ -176,10 +171,10 @@ public class UserServiceTest extends AbstractTest {
         when(userDao.existEmail(connection, newExistEmail)).thenReturn(true);
         when(userDao.getUserById(connection, userId)).thenReturn(user);
         // FUNCTIONALITY
-        String message1 = userService.changeUserData(userId, newUserLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRoleId);
-        String message2 = userService.changeUserData(userId, "", "", newUserPassword, newUserStatusId, newUserRoleId);
-        String message3 = userService.changeUserData(userId, newExistLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRoleId);
-        String message4 = userService.changeUserData(userId, newUserLogin, newExistEmail, newUserPassword, newUserStatusId, newUserRoleId);
+        String message1 = userService.changeUserData(userId, newUserLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRole);
+        String message2 = userService.changeUserData(userId, "", "", newUserPassword, newUserStatusId, newUserRole);
+        String message3 = userService.changeUserData(userId, newExistLogin, newUserEmail, newUserPassword, newUserStatusId, newUserRole);
+        String message4 = userService.changeUserData(userId, newUserLogin, newExistEmail, newUserPassword, newUserStatusId, newUserRole);
         // TESTS
         assertNull(message1);
         assertEquals("emptyField", message2);

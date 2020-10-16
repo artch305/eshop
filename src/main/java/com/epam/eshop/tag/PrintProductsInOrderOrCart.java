@@ -85,7 +85,7 @@ public class PrintProductsInOrderOrCart extends TagSupport {
                 if (inCart) {
                     printEditRemoveViewButtons(out, productEntry, "/cart", "actionCart");
                 } else {
-                    if (UserRole.ADMINISTRATOR.equals(user.getUserRole().getRole())) {
+                    if (UserRole.ADMINISTRATOR.equals(user.getUserRole())) {
                         printEditRemoveViewButtons(out, productEntry, "/orders/" + getOrderId(order), "actionOrder");
                     } else {
                         out.write("<div class=\"col-2\">");

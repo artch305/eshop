@@ -45,7 +45,7 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+        Util.replaceAttributeFromSessionIntoRequest(request, AttributesNames.SUCCESS);
 
         request.getRequestDispatcher(URLConstants.CART_JSP).forward(request, response);
     }

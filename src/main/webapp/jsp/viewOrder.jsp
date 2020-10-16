@@ -1,3 +1,4 @@
+<%@ page import="com.epam.eshop.entity.UserRole" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -21,6 +22,9 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 
+<c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
+<c:set var="customer" value="<%=UserRole.CUSTOMER%>"/>
+
 <fmt:bundle basename="messages" prefix="orders.">
 
 <div class="container">
@@ -28,7 +32,7 @@
         <thead>
         <tr>
             <th class="align-top">Order ID</th>
-            <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+            <c:if test="${sessionScope.currentUser.userRole == administrator}">
                 <th class="align-top"><fmt:message key="userEmail"/></th>
             </c:if>
             <th class="align-top"><fmt:message key="totalPrice"/></th>
@@ -40,7 +44,7 @@
         <tbody>
         <tr>
             <td>${requestScope.currentOrder.id}</td>
-            <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+            <c:if test="${sessionScope.currentUser.userRole == administrator}">
                 <td>${requestScope.currentOrder.userEmail}</td>
             </c:if>
             <td><fmt:formatNumber type="number" maxFractionDigits="2"
@@ -48,10 +52,10 @@
             </td>
             <td>${requestScope.currentOrder.createDate}</td>
             <td>${requestScope.currentOrder.lastUpdateDate}</td>
-            <td><c:if test="${sessionScope.currentUser.userRole.role == 'customer'}">
+            <td><c:if test="${sessionScope.currentUser.userRole == customer}">
                 ${requestScope.currentOrder.orderStatus.status}
             </c:if>
-                <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+                <c:if test="${sessionScope.currentUser.userRole == administrator}">
                     <div class="container-fluid">
                         <form action="${pageContext.request.contextPath}/orders/${requestScope.currentOrder.id}" method="post">
                             <input type="hidden" name="actionOrder" value="changeStatus">

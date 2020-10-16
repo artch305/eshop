@@ -1,4 +1,5 @@
 <%@ page import="com.epam.eshop.entity.Category" %>
+<%@ page import="com.epam.eshop.entity.UserRole" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -24,6 +25,11 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 
+<c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
+<c:set var="customer" value="<%=UserRole.CUSTOMER%>"/>
+<c:set var="monitors" value="<%=Category.MONITORS%>"/>
+<c:set var="keyboards" value="<%=Category.KEYBOARDS%>"/>
+
 <fmt:bundle basename="messages" prefix="product.">
 
 <div class="container">
@@ -34,7 +40,7 @@
                        type="submit" class="btn btn-info"><fmt:message key="catalog"/></a>
             </div>
 
-        <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+        <c:if test="${sessionScope.currentUser.userRole == administrator}">
             <div class="col-2">
 
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal${requestScope.currentProduct.id}">
@@ -50,7 +56,7 @@
             </div>
         </c:if>
 
-        <c:if test="${sessionScope.currentUser.userRole.role == 'customer'}">
+        <c:if test="${sessionScope.currentUser.userRole == customer}">
             <div class="col-2">
                 <c:choose>
                     <c:when test="${requestScope.currentProduct.active}">
@@ -86,10 +92,10 @@
 
         <c:choose>
 
-            <c:when test="${requestScope.currentProduct.category.databaseValue == 'monitors'}">
+            <c:when test="${requestScope.currentProduct.category == monitors}">
                 <c:import url="jspComponent/monitor.jsp"/>
             </c:when>
-            <c:when test="${requestScope.currentProduct.category.databaseValue == 'keyboards'}">
+            <c:when test="${requestScope.currentProduct.category == keyboards}">
                 <c:import url="jspComponent/keyboard.jsp"/>
             </c:when>
 
@@ -117,24 +123,6 @@
 
         return false;
     }
-
-    /*
-        function change(formId) {
-
-            var formElement = $('#' + formId);
-            var addUrl = formElement.prop('action');
-
-            $.post(addUrl,formElement.serializeArray())
-                .done(function (resp) {
-                    window.location.reload();
-                })
-                .fail(function (err) {
-                    console.log(err);
-                    alert('Failed to change cart');
-                });
-
-            return false;
-        }*/
 
 </script>
 </body>

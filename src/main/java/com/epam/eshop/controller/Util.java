@@ -5,6 +5,7 @@ import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Cart;
 import com.epam.eshop.entity.User;
+import com.epam.eshop.entity.UserRole;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,14 +28,14 @@ public class Util {
         session.setAttribute(attributeName, object);
     }
 
-    public static void replaceSuccessAttrFromSessionIntoRequest (HttpServletRequest request){
+    public static void replaceAttributeFromSessionIntoRequest(HttpServletRequest request, String attribute){
         HttpSession session = request.getSession();
-        request.setAttribute(AttributesNames.SUCCESS, session.getAttribute(AttributesNames.SUCCESS));
-        session.removeAttribute(AttributesNames.SUCCESS);
+        request.setAttribute(attribute, session.getAttribute(attribute));
+        session.removeAttribute(attribute);
     }
 
-    public static boolean checkUserRole (User user, String role){
-        return user != null && user.getUserRole().getRole().equals(role);
+    public static boolean checkUserRole (User user, UserRole role){
+        return user != null && user.getUserRole().equals(role);
     }
 
     public static String getIdFromURL(String pathInfo){

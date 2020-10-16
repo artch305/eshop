@@ -20,22 +20,20 @@ import java.util.List;
 public class UserDAO {
 
     private final static String SQL_GET_USER_BY_LOGIN = "SELECT * FROM users " +
-            "join user_roles on users.user_role_id = user_roles.id " +
             "join user_statuses on users.user_status_id = user_statuses.id " +
             "WHERE login = ?";
-    private final static String SQL_SET_USER = "INSERT INTO users (login, email, password, user_status_id, user_role_id, lang) " +
+    private final static String SQL_SET_USER = "INSERT INTO users (login, email, password, user_status_id, role, lang) " +
             "VALUES (?,?,?,?,?,?)";
     private final static String SQL_CHECK_LOGIN = "SELECT id FROM users where login = ?";
     private final static String SQL_CHECK_EMAIL = "SELECT id FROM users where email = ?";
     private final static String SQL_SET_USER_LANG = "update users set lang = ? where id = ?";
-    private final static String SQL_GET_ALL_USERS = "select * from users join user_roles on users.user_role_id = user_roles.id " +
+    private final static String SQL_GET_ALL_USERS = "select * from users " +
             "join user_statuses on users.user_status_id = user_statuses.id";
     private final static String SQL_GET_USER_BY_ID = "select * from users " +
-            "join user_roles on users.user_role_id = user_roles.id " +
             "join user_statuses on users.user_status_id = user_statuses.id " +
             "where users.id = ?";
     private final static String SQL_UPDATE_USERDATA = "update users set login = ?, email = ?, password = ?, " +
-            "user_status_id = ?, user_role_id = ? where id = ?";
+            "user_status_id = ?, role = ? where id = ?";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDAO.class);
 
@@ -62,18 +60,11 @@ public class UserDAO {
         user.setEmail(resultSet.getString(Columns.USERS_EMAIL));
         user.setRegistrationDate(resultSet.getString(Columns.USERS_REGISTRATION_DATE));
         user.setLang(resultSet.getString(Columns.USERS_LANG));
+        user.setUserRole(UserRole.getUserRoleByName(resultSet.getString(Columns.USERS_ROLE)));
 
         fillUserStatus(user, resultSet);
 
-        fillUserRole(user, resultSet);
         LOGGER.info("User - {} fields has been filled", user.getLogin());
-    }
-
-    private void fillUserRole(User user, ResultSet resultSet) throws SQLException {
-        UserRole userRole = new UserRole();
-        userRole.setId(resultSet.getInt(Columns.USERS_USER_ROLE_ID));
-        userRole.setRole(resultSet.getString(Columns.USER_ROLES_USER_ROLE));
-        user.setUserRole(userRole);
     }
 
     private void fillUserStatus(User user, ResultSet resultSet) throws SQLException {
@@ -83,7 +74,7 @@ public class UserDAO {
         user.setUserStatus(userStatus);
     }
 
-    public User setUser(Connection connection, String login, String email, String password, int userRoleId, String lang) throws SQLException {
+    public User setUser(Connection connection, String login, String email, String password, String role, String lang) throws SQLException {
         User newUser;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SET_USER)) {
@@ -91,7 +82,7 @@ public class UserDAO {
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, password);
             preparedStatement.setString(4, "1"); // TODO: 14.10.2020 what is it? enum like order status?
-            preparedStatement.setString(5, String.valueOf(userRoleId));
+            preparedStatement.setString(5, role);
             preparedStatement.setString(6, lang);
             preparedStatement.execute();
 
@@ -168,13 +159,13 @@ public class UserDAO {
         return user;
     }
 
-    public void updateUserData(Connection connection, int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, int newUserRoleId) throws SQLException {
+    public void updateUserData(Connection connection, int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, String newUserRole) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USERDATA)) {
             preparedStatement.setString(1, newLogin); // TODO: 14.10.2020 index var increment
             preparedStatement.setString(2, newEmail);
             preparedStatement.setString(3, newPassword);
             preparedStatement.setString(4, String.valueOf(newUserStatusId));
-            preparedStatement.setString(5, String.valueOf(newUserRoleId));
+            preparedStatement.setString(5, newUserRole);
             preparedStatement.setString(6, String.valueOf(userId));
             preparedStatement.execute();
             LOGGER.info("Update user | {} | successfully", newLogin);

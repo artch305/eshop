@@ -1,10 +1,10 @@
 package com.epam.eshop.service;
 
+import com.epam.eshop.entity.UserRole;
 import com.epam.eshop.exception.DBException;
 import com.epam.eshop.dao.ConnectionManager;
 import com.epam.eshop.dao.UserDAO;
 import com.epam.eshop.entity.User;
-import com.epam.eshop.entity.UserSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +89,7 @@ public class UserService {
         User user;
 
         try (Connection connection = connectionManager.getConnection()) {
-            user = userDAO.setUser(connection, login, email, password, 2, lang);
+            user = userDAO.setUser(connection, login, email, password, UserRole.CUSTOMER.getRole(), lang);
             usersInCache = null;
         } catch (SQLException e) {
             LOGGER.error("Can't set user |{}|", login, e);
@@ -110,7 +110,7 @@ public class UserService {
         }
     }
 
-    public String changeUserData(int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, int newUserRoleId) {
+    public String changeUserData(int userId, String newLogin, String newEmail, String newPassword, int newUserStatusId, String newUserRole) {
         if (isEmptyField(newLogin, newEmail, newPassword)) {
             return "emptyField";
         }
@@ -126,7 +126,7 @@ public class UserService {
                 return "existEmail";
             }
 
-            userDAO.updateUserData(connection, userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRoleId);
+            userDAO.updateUserData(connection, userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRole);
             usersInCache = null;
             return null;
         } catch (SQLException e) {

@@ -56,7 +56,7 @@ public class PrintProductsTag extends TagSupport {
                 out.write("<div class=\"col-sm-6\" style=\"margin-left: 10px; margin-right: 10px;\">");
                 out.write(product.toString() + "<br/><br/>");
 
-                if (currentUser != null && currentUser.getUserRole().getRole().equals(UserRole.ADMINISTRATOR)) {
+                if (currentUser != null && UserRole.ADMINISTRATOR.equals(currentUser.getUserRole())) {
                     out.write(product.isActive() ? "<span class=\"badge badge-primary\">" + "<h6>active</h6>" + "</span>" :
                             "<span class=\"badge badge-danger\">" + "<h6>inactive</h6>" + "</span>");
                 }
@@ -70,7 +70,7 @@ public class PrintProductsTag extends TagSupport {
                         " class=\"btn btn-info\" role=\"button\" style=\"margin: 5px 5px\">View details</a>");
                 out.write("</div>");
 
-                if (currentUser != null && currentUser.getUserRole().getRole().equals(UserRole.CUSTOMER)) {
+                if (currentUser != null && UserRole.CUSTOMER.equals(currentUser.getUserRole())) {
                     String formId = "add_form" + product.getId();
 
                     out.write("<div class=\"row\">");
@@ -81,7 +81,7 @@ public class PrintProductsTag extends TagSupport {
                     out.write("<button  type=\"submit\"  class=\"btn btn-success\" style=\"margin: 5px 5px\">Add to cart</button>");
                     out.write("</form>");
                     out.write("</div>");
-                } else if (currentUser != null && currentUser.getUserRole().getRole().equals(UserRole.ADMINISTRATOR)) {
+                } else if (currentUser != null && UserRole.ADMINISTRATOR.equals(currentUser.getUserRole())) {
                     out.write("<div class=\"row\">");
 
                     out.write("<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" " +

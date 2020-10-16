@@ -12,12 +12,11 @@ public class Columns {
     public static final String USERS_USER_ROLE_ID = "user_role_id";
     public static final String USERS_REGISTRATION_DATE = "registration_date";
     public static final String USERS_LANG = "lang";
+    public static final String USERS_ROLE = "role";
+
 
     public static final String USER_STATUSES_ID = "id";
     public static final String USER_STATUSES_USER_STATUS = "user_status";
-
-    public static final String USER_ROLES_ID = "id";
-    public static final String USER_ROLES_USER_ROLE = "user_role";
 
     public static final String PRODUCTS_ID = "id";
     public static final String PRODUCTS_CATEGORY = "category";

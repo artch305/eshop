@@ -1,3 +1,4 @@
+<%@ page import="com.epam.eshop.entity.UserRole" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -21,6 +22,8 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 
+<c:set var="administrator" value="<%=UserRole.ADMINISTRATOR%>"/>
+
 <fmt:bundle basename="messages" prefix="orders.">
 
     <div class="container-fluid" style="margin: 10px">
@@ -29,7 +32,7 @@
             <thead>
             <tr class="table-primary">
                 <th class="align-top"><fmt:message key="orderId"/></th>
-                <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+                <c:if test="${sessionScope.currentUser.userRole == administrator}">
                     <th class="align-top"><fmt:message key="userEmail"/></th>
                 </c:if>
                 <th class="align-top"><fmt:message key="totalPrice"/></th>
@@ -43,7 +46,7 @@
             <c:forEach var="order" items="${sessionScope.orders}">
             <tr>
                 <td>${order.id}</td>
-                <c:if test="${sessionScope.currentUser.userRole.role == 'administrator'}">
+                <c:if test="${sessionScope.currentUser.userRole == administrator}">
                     <td>${order.userEmail}</td>
                 </c:if>
                 <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${order.totalPrice}"/>$</td>

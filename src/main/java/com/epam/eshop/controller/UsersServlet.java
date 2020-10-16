@@ -33,9 +33,9 @@ public class UsersServlet extends HttpServlet {
         String newEmail = request.getParameter(ParameterNames.EMAIL).trim();
         String newPassword = request.getParameter(ParameterNames.PASSWORD).trim();
         int newUserStatusId = Integer.parseInt(request.getParameter(ParameterNames.USER_STATUS));
-        int newUserRoleId = Integer.parseInt(request.getParameter(ParameterNames.USER_ROLE)); // TODO: 14.10.2020 wrap all these parameters into DTO (data-transfer object) to hold and transfer it and reduce amount of parameters in method signature
+        String newUserRole = request.getParameter(ParameterNames.USER_ROLE); // TODO: 14.10.2020 wrap all these parameters into DTO (data-transfer object) to hold and transfer it and reduce amount of parameters in method signature
 
-        String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRoleId);
+        String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatusId, newUserRole);
 
         if (errorMessage == null) {
             request.getSession().setAttribute(AttributesNames.SUCCESS, "success");
@@ -61,7 +61,7 @@ public class UsersServlet extends HttpServlet {
         List<User> users = userService.getAllUsers();
         request.setAttribute(AttributesNames.USERS, users);
 
-        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+        Util.replaceAttributeFromSessionIntoRequest(request, AttributesNames.SUCCESS);
         
         request.getRequestDispatcher(URLConstants.USERS_JSP).forward(request, response);
     }

@@ -1,4 +1,4 @@
-
+<%@ page import="com.epam.eshop.entity.Category" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -17,13 +17,16 @@
 </head>
 <body>
 
-<c:set var="categoryParamName" value="category"/>
 
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 
 <fmt:bundle basename="messages" prefix="products.">
+
+    <c:set var="monitors" value="<%=Category.MONITORS%>"/>
+    <c:set var="keyboards" value="<%=Category.KEYBOARDS%>"/>
+
 
     <c:import
             url="jspComponent/head.jsp?currentPageForReturn=${pageContext.request.contextPath}/products?category=${pageContext.request.getParameter(categoryParamName)}"/>
@@ -37,12 +40,12 @@
         <div class="row">
 
             <div class="col-sm-2" style="margin-left: 10px; margin-right: 10px;">
-
+                <c:set var="categoryParamName" value="category"/>
                 <c:choose>
-                    <c:when test="${pageContext.request.getParameter(categoryParamName) == 'monitors'}">
+                    <c:when test="${pageContext.request.getParameter(categoryParamName) == monitors.databaseValue}">
                         <c:import url="jspComponent/monitorsFilters.jsp"/>
                     </c:when>
-                    <c:when test="${pageContext.request.getParameter(categoryParamName) == 'keyboards'}">
+                    <c:when test="${pageContext.request.getParameter(categoryParamName) == keyboards.databaseValue}">
                         <c:import url="jspComponent/keyboardsFilters.jsp"/>
                     </c:when>
                 </c:choose>

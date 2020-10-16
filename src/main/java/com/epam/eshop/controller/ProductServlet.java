@@ -56,7 +56,7 @@ public class ProductServlet extends HttpServlet {
         ProductService productService = new ProductService(category);
         Product currentProduct = productService.getProduct(id);
         request.setAttribute(AttributesNames.CURRENT_PRODUCT, currentProduct);
-        Util.replaceSuccessAttrFromSessionIntoRequest(request);
+        Util.replaceAttributeFromSessionIntoRequest(request, AttributesNames.SUCCESS);
 
         request.getRequestDispatcher(URLConstants.VIEW_PRODUCT).forward(request, response);
     }

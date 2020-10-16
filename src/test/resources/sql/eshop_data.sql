@@ -12,18 +12,12 @@ insert into order_statuses (id, order_status)
 values (3, 'canceled');
 
 
-insert into user_roles (id, user_role)
-values (1, 'administrator');
-insert into user_roles (id, user_role)
-values (2, 'customer');
-
-
-insert into users (login, email, password, user_status_id, user_role_id, lang)
-values ('artch', 'artch@gmail.com', 'artchpass', 1, 1, 'en');
-insert into users (login, email, password, user_status_id, user_role_id, lang)
-values ('ferian', 'ferian@ukr.net', 'ferianpass', 1, 2, 'ru');
-insert into users (login, email, password, user_status_id, user_role_id, lang)
-values ('mefist', 'mefist@gmail.com', 'mefistpass', 1, 2, 'ru');
+insert into users (login, email, password, user_status_id, role, lang)
+values ('artch', 'artch@gmail.com', 'artchpass', 1, 'administrator', 'en');
+insert into users (login, email, password, user_status_id, role, lang)
+values ('ferian', 'ferian@ukr.net', 'ferianpass', 1, 'customer', 'ru');
+insert into users (login, email, password, user_status_id, role, lang)
+values ('mefist', 'mefist@gmail.com', 'mefistpass', 1, 'customer', 'ru');
 
 
 insert into products (category, producer, name, price, img_url)

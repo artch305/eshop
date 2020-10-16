@@ -88,7 +88,7 @@ public class MonitorFilterService extends BaseFilterService {
     public AbstractFilters getFiltersForUser(User user) {
         AbstractFilters filters = FiltersMapper.getFilters(Category.MONITORS.getDatabaseValue());
 
-        if (user == null || UserRole.CUSTOMER.equals(user.getUserRole().getRole())) {
+        if (user == null || UserRole.CUSTOMER.equals(user.getUserRole())) {
             List<Boolean> active = new ArrayList<>();
             active.add(true);
             filters.setActive(active);
