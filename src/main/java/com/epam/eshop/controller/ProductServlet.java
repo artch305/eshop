@@ -4,6 +4,7 @@ import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.controller.constants.ParameterNames;
 import com.epam.eshop.controller.constants.URLConstants;
 import com.epam.eshop.entity.Product;
+import com.epam.eshop.entity.UserRole;
 import com.epam.eshop.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -29,6 +30,10 @@ public class ProductServlet extends HttpServlet {
     private static final String PRODUCT_ACTION_ADD = "addProduct";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!Util.checkUserRole(Util.getUserFromSession(request.getSession()), UserRole.ADMINISTRATOR)){
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
+        }
+
         String returnPath = Util.getReturnPath(request);
 
         String action = request.getParameter(ParameterNames.PRODUCT_ACTION);

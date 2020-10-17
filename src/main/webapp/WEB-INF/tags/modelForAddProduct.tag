@@ -84,8 +84,8 @@
                             </div>
                             <div class="col-5">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-sm"
-                                           name="description" value="">
+                                    <textarea class="form-control form-control-sm"
+                                               name="description"></textarea>
                                 </div>
                             </div>
                         </div>

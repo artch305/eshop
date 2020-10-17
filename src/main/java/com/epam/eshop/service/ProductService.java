@@ -4,6 +4,7 @@ package com.epam.eshop.service;
 import com.epam.eshop.controller.Util;
 import com.epam.eshop.controller.constants.AttributesNames;
 import com.epam.eshop.controller.constants.ParameterNames;
+import com.epam.eshop.dao.AllValuesForFilters;
 import com.epam.eshop.dao.Columns;
 import com.epam.eshop.dao.ConnectionManager;
 import com.epam.eshop.dao.ProductDAO;
@@ -102,6 +103,7 @@ public class ProductService {
             productDAO.updateProduct(connection, values);
             connection.commit();
             request.getSession().setAttribute(AttributesNames.SUCCESS, "success");
+            AllValuesForFilters.resetAllValuesForCategory(request.getParameter(ParameterNames.CATEGORY));
             return true;
         } catch (SQLException e) {
             rollback(connection);
@@ -125,6 +127,7 @@ public class ProductService {
             connection.setAutoCommit(false);
             newProductId = productDAO.addNewProduct(connection, values);
             connection.commit();
+            AllValuesForFilters.resetAllValuesForCategory(request.getParameter(ParameterNames.CATEGORY));
         } catch (SQLException e) {
             rollback(connection);
             LOGGER.error("Can't add new product |{}|", values.get(Columns.PRODUCTS_PRODUCER) + values.get(Columns.PRODUCTS_NAME), e);

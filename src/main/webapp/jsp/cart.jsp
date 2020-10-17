@@ -33,12 +33,12 @@
         </c:when>
 
     </c:choose>
-
+        <div class="mt-2">
 
     <ctg:printProductsInCartOrOrder productsWithAmount="${sessionScope.currentUserCart.productsInCart}" inCart="true">
 
     </ctg:printProductsInCartOrOrder>
-
+        </div>
 
     <c:choose>
         <c:when test="${sessionScope.currentUserCart.productsInCart.isEmpty()}">

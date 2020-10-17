@@ -78,8 +78,8 @@
                                 </div>
                                 <div class="col-5">
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control-sm"
-                                               name="description" value="${product.description}">
+                                        <textarea  class="form-control form-control-sm"
+                                                  name="description">${product.description}</textarea>
                                     </div>
                                 </div>
                             </div>

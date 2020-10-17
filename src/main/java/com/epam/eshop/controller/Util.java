@@ -60,7 +60,7 @@ public class Util {
     }
 
     public static boolean checkUserRole (User user, UserRole role){
-        return user != null && user.getUserRole().equals(role);
+        return user != null && user.getUserRole() == role;
     }
 
     public static String getIdFromURL(String pathInfo){
@@ -100,12 +100,12 @@ public class Util {
                 return newImgURL;
             }
 
-            Path dir = Paths.get(path);
+            Path dir = Paths.get(request.getServletContext().getRealPath("")).resolve(path);
             dir.toFile().mkdirs();
             Path createdImageFilePath = dir.resolve(fileName);
             InputStream fileInputStream = filePart.getInputStream();
             Files.copy(fileInputStream, createdImageFilePath, StandardCopyOption.REPLACE_EXISTING);
-            newImgURL = createdImageFilePath.toAbsolutePath().toString();
+            newImgURL = path + "/" + fileName.replace("\\", "/");
         } catch (IOException | ServletException e) {
             LOGGER.error("Can't upload image", e);
         }
@@ -114,7 +114,7 @@ public class Util {
 
     private static String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
-        for (String content : part.getHeader("content-disposition").split(";")) {
+        for (String content : partHeader.split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(
                         content.indexOf('=') + 1).trim().replace("\"", "");

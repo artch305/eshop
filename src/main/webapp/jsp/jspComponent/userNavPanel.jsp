@@ -10,9 +10,9 @@
 
 <fmt:bundle basename="messages" prefix="userNavPanel.">
     <div class="container-fluid" id="userCart">
-        <div class="row">
+        <div class="row bg-primary mx-2">
 
-            <div class="col-8" style="margin: 10px 10px">
+            <div class="col-9 my-2">
                 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">

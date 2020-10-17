@@ -12,9 +12,9 @@
 
 <fmt:bundle basename="messages" prefix="adminNavPanel.">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row bg-dark mx-2">
 
-            <div class="col-8" style="margin: 10px 10px">
+            <div class="col-9 my-2">
                 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -60,7 +60,7 @@
                 </nav>
             </div>
 
-            <div class="col-2" style="margin: 10px 10px">
+            <div class="col-2 my-2">
                 <c:import url="jspComponent/langChangePanel.jsp"/>
             </div>
 

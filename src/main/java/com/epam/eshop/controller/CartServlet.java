@@ -26,6 +26,10 @@ import java.io.IOException;
 public class CartServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!Util.checkUserRole(Util.getUserFromSession(request.getSession()), UserRole.CUSTOMER)){
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
+        }
+
         String actionName = request.getParameter(ParameterNames.ACTION_NAME_FOR_CART);
 
         CartActionHandler cartAction = CartActionFactory.getAction(actionName);

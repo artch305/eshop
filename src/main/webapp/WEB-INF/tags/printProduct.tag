@@ -64,7 +64,7 @@
                                 <span class="badge badge-primary"><fmt:message key="product.active"/></span>
                             </c:when>
                             <c:when test="${!product.active}">
-                                <span class="badge badge-primary"><fmt:message key="product.inactive"/></span>
+                                <span class="badge badge-danger"><fmt:message key="product.inactive"/></span>
                             </c:when>
                         </c:choose>
                     </c:if>

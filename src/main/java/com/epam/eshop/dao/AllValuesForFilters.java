@@ -1,4 +1,5 @@
 package com.epam.eshop.dao;
+import com.epam.eshop.entity.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,20 @@ public class AllValuesForFilters {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AllValuesForFilters.class);
+
+    public static void resetAllValuesForCategory (String categoryName){
+        Category category = Category.getCategoryByName(categoryName);
+
+        if (Category.MONITORS == category){
+            producersForMonitors = null;
+            panelTypes = null;
+            diagonals = null;
+        } else if (Category.KEYBOARDS == category){
+            producersForKeyboards = null;
+            lightColors = null;
+            connectionTypes = null;
+        }
+    }
 
     public List<String> getProducersForMonitors() {
         if (producersForMonitors == null){

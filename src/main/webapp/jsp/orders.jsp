@@ -13,6 +13,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link href="css/addons/datatables.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/addons/datatables.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 </head>
 <body>
 
@@ -26,60 +30,66 @@
 
 <fmt:bundle basename="messages" prefix="orders.">
 
-    <div class="container-fluid" style="margin: 10px">
-
-        <table class="table table-striped">
-            <thead>
-            <tr class="table-primary">
-                <th class="align-top"><fmt:message key="orderId"/></th>
-                <c:if test="${sessionScope.currentUser.userRole == administrator}">
-                    <th class="align-top"><fmt:message key="userEmail"/></th>
-                </c:if>
-                <th class="align-top"><fmt:message key="totalPrice"/></th>
-                <th class="align-top"><fmt:message key="createDate"/></th>
-                <th class="align-top"><fmt:message key="lastUpdateDate"/></th>
-                <th class="align-top"><fmt:message key="status"/></th>
-                <th class="align-top"><fmt:message key="viewDetails"/></th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="order" items="${sessionScope.orders}">
-            <tr>
-                <td>${order.id}</td>
-                <c:if test="${sessionScope.currentUser.userRole == administrator}">
-                    <td>${order.userEmail}</td>
-                </c:if>
-                <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${order.totalPrice}"/>$</td>
-                <td>${order.createDate}</td>
-                <td>${order.lastUpdateDate}</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${order.orderStatus.status == 'registered'}">
-                            <fmt:message key="registered"/>
-                        </c:when>
-                        <c:when test="${order.orderStatus.status == 'paid'}">
-                            <fmt:message key="paid"/>
-                        </c:when>
-                        <c:when test="${order.orderStatus.status == 'canceled'}">
-                            <fmt:message key="canceled"/>
-                        </c:when>
-                    </c:choose>
-                </td>
-                <td><a href="${pageContext.request.contextPath}/orders/${order.id}"
-                       class="btn btn-info" role="button">
-                    <img src="${pageContext.request.contextPath}/img/icons/icons8-view-64.png"
-                         style="max-height: 30px">
-                </a>
-                </td>
-            </tr>
-            </c:forEach>
-
+    <div class="container-fluid">
+        <div class="mx-2">
+            <table id="orders" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                <tr class="table-primary">
+                    <th class="align-top"><fmt:message key="orderId"/></th>
+                    <c:if test="${sessionScope.currentUser.userRole == administrator}">
+                        <th class="align-top"><fmt:message key="userEmail"/></th>
+                    </c:if>
+                    <th class="align-top"><fmt:message key="totalPrice"/></th>
+                    <th class="align-top"><fmt:message key="createDate"/></th>
+                    <th class="align-top"><fmt:message key="lastUpdateDate"/></th>
+                    <th class="align-top"><fmt:message key="status"/></th>
+                    <th class="align-top"><fmt:message key="viewDetails"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="order" items="${sessionScope.orders}">
+                    <tr>
+                        <td>${order.id}</td>
+                        <c:if test="${sessionScope.currentUser.userRole == administrator}">
+                            <td>${order.userEmail}</td>
+                        </c:if>
+                        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${order.totalPrice}"/>$</td>
+                        <td>${order.createDate}</td>
+                        <td>${order.lastUpdateDate}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${order.orderStatus.status == 'registered'}">
+                                    <fmt:message key="registered"/>
+                                </c:when>
+                                <c:when test="${order.orderStatus.status == 'paid'}">
+                                    <fmt:message key="paid"/>
+                                </c:when>
+                                <c:when test="${order.orderStatus.status == 'canceled'}">
+                                    <fmt:message key="canceled"/>
+                                </c:when>
+                            </c:choose>
+                        </td>
+                        <td><a href="${pageContext.request.contextPath}/orders/${order.id}"
+                               class="btn btn-info" role="button">
+                            <img src="${pageContext.request.contextPath}/img/icons/icons8-view-64.png"
+                                 style="max-height: 20px">
+                        </a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script lang="javascript">
-
+        $(document).ready(function () {
+            $('#orders').DataTable();
+            $('.dataTables_length').addClass('bs-select');
+        });
 
     </script>
+
 </fmt:bundle>
 </body>
 </html>

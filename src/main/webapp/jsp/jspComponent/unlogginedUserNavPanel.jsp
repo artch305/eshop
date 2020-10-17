@@ -10,9 +10,9 @@
 
 <fmt:bundle basename="messages" prefix="unlogginedUserNavPanel.">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row bg-secondary mx-2" >
 
-            <div class="col-8" style="margin: 10px 10px">
+            <div class="col-9" style="margin: 10px 10px">
                 <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">

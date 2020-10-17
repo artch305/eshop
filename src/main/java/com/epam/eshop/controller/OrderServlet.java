@@ -38,6 +38,10 @@ public class OrderServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!Util.checkUserRole(Util.getUserFromSession(request.getSession()), UserRole.ADMINISTRATOR)){
+            response.sendRedirect(request.getContextPath() + URLConstants.MAIN);
+        }
+
         String action = request.getParameter(ParameterNames.ACTION_NAME_FOR_ORDER);
         String orderId = request.getParameter(ParameterNames.ORDER_ID);
         String productId = request.getParameter(ParameterNames.PRODUCT_ID);

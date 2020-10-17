@@ -89,7 +89,8 @@
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="diagonals" value="${diagonal}"
-                               <c:if test="${sessionScope.filters.diagonals.contains(diagonal)}">checked</c:if>>${diagonal}"
+                               <c:if test="${sessionScope.filters.diagonals.contains(diagonal)}">checked</c:if>><fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                                                                                  value="${diagonal}"/>"
                     </label>
                 </div>
             </c:forEach>
