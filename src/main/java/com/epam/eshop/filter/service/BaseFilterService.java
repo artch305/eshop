@@ -31,9 +31,9 @@ public abstract class BaseFilterService implements FilterService {
         put("producerZ-A", Columns.PRODUCTS_PRODUCER + " desc");
     }};
 
-    public void updateFilters(AbstractFilters filters, HttpServletRequest request) { // TODO: 14.10.2020 model should not know anything about controller implementation
+    public void updateFilters(AbstractFilters filters, HttpServletRequest request) {
         String newMinPriceStr = request.getParameter("minPrice");
-        double newMinPrice = newMinPriceStr.isEmpty() ? 0 : Double.parseDouble(newMinPriceStr); // TODO: 14.10.2020 duplication of retrieving and transforming param
+        double newMinPrice = newMinPriceStr.isEmpty() ? 0 : Double.parseDouble(newMinPriceStr);
 
         String newMaxPriceStr = request.getParameter("maxPrice");
         double newMaxPrice = newMaxPriceStr.isEmpty() ? 0 : Double.parseDouble(newMaxPriceStr);

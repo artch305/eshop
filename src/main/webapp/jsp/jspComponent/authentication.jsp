@@ -1,3 +1,4 @@
+<%@ page import="com.captcha.botdetect.web.servlet.Captcha" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -32,6 +33,7 @@
                 </c:if>
                 </div>
             </div>
+
             <div class="container" >
                 <div class="row">
                     <div class="col-" style="margin-right: 20px; margin-bottom: 10px">

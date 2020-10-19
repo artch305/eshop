@@ -48,7 +48,7 @@ public class OrderServlet extends HttpServlet {
 
         boolean success;
 
-        switch (action) { // TODO: rewritten with using Command pattern with success flag return
+        switch (action) {
             case ACTION_ORDER_CHANGE_AMOUNT: {
                 String amount = request.getParameter(ParameterNames.PRODUCT_AMOUNT);
                 success = orderService.changeProductAmountInOrder(orderId, productId, amount);

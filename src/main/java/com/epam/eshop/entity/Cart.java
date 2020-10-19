@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Cart {
 
-    private final Map<Product, Integer> productsInCart = new HashMap<>(); // TODO: 14.10.2020 manage modification of collection state within the class. e.g., create mmethods clear, add, remove and do not expose modifiable collection outside
+    private final Map<Product, Integer> productsInCart = new HashMap<>();
     private int userId;
 
     public int getAllAmountProductsInCart() {
@@ -30,7 +30,7 @@ public class Cart {
     }
 
     public Map<Product, Integer> getProductsInCart() {
-        return productsInCart; // TODO: 14.10.2020 use Collections.unmodifiableMap()
+        return productsInCart;
     }
 
     public double getTotalPrice() {

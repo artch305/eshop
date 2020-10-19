@@ -36,7 +36,7 @@ public class UsersServlet extends HttpServlet {
         String newEmail = request.getParameter(ParameterNames.EMAIL).trim();
         String newPassword = request.getParameter(ParameterNames.PASSWORD).trim();
         String newUserStatus = request.getParameter(ParameterNames.USER_STATUS);
-        String newUserRole = request.getParameter(ParameterNames.USER_ROLE); // TODO: 14.10.2020 wrap all these parameters into DTO (data-transfer object) to hold and transfer it and reduce amount of parameters in method signature
+        String newUserRole = request.getParameter(ParameterNames.USER_ROLE);
 
         String errorMessage = userService.changeUserData(userId, newLogin, newEmail, newPassword, newUserStatus, newUserRole);
 

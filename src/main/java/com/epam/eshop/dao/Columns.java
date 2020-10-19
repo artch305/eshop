@@ -4,7 +4,7 @@ package com.epam.eshop.dao;
  * Created by artch on 06.10.2020.
  */
 public class Columns {
-    public static final String USERS_ID = "id"; // TODO: 14.10.2020 add comments for which table these columns belong
+    public static final String USERS_ID = "id";
     public static final String USERS_LOGIN = "login";
     public static final String USERS_EMAIL = "email";
     public static final String USERS_PASSWORD = "password";

@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
  */
 public class KeyboardFilterService extends BaseFilterService {
     @Override
-    public void updateFilters(AbstractFilters filters, HttpServletRequest request) { // TODO: 14.10.2020 model should not know anything about controller implementation
+    public void updateFilters(AbstractFilters filters, HttpServletRequest request) {
         FiltersKeyboardProducts filtersKeyboard = (FiltersKeyboardProducts) filters;
 
-        String[] newConnectionTypesArray = request.getParameterValues("connectionTypes"); // TODO: 14.10.2020 duplication
+        String[] newConnectionTypesArray = request.getParameterValues("connectionTypes");
         List<String> newConnectionTypes = newConnectionTypesArray == null ? null : Arrays.asList(newConnectionTypesArray);
 
         String[] newMechanicalArray = request.getParameterValues("mechanical");
